@@ -27,10 +27,11 @@ import rx.Subscriber;
  */
 public class MainActivityFragment extends Fragment {
 
-    private static final int POSTS_LOADER_ID = 0;
+    @SuppressWarnings("WeakerAccess")
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
+    @SuppressWarnings("WeakerAccess")
     @Inject
     StoryRepository mStoryRepository;
 

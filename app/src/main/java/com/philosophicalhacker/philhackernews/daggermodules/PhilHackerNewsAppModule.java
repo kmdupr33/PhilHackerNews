@@ -9,6 +9,8 @@ import dagger.Provides;
 import retrofit.RestAdapter;
 
 /**
+ * Provides top level dependencies for all objects in the app.
+ *
  * Created by MattDupree on 7/16/15.
  */
 @Module(library = true)

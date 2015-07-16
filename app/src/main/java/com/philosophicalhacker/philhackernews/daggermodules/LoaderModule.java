@@ -16,12 +16,13 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.observables.ConnectableObservable;
 
 /**
+ * Provides dependencies required for Loading HackerNews Data
+ *
  * Created by MattDupree on 7/16/15.
  */
 @Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class)

@@ -12,10 +12,12 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
+ * Overrides the HackerNewsRestAdapter with an adapter that loads a JSON string from memory.
+ *
  * Created by MattDupree on 7/16/15.
  */
 @Module(overrides = true, library = true, complete = false)
-public class TestLoaderModule {
+class TestLoaderModule {
     @Provides
     HackerNewsRestAdapter provideHackerNewsRestAdapter() {
         final Gson gson = new Gson();
