@@ -2,8 +2,9 @@ package com.philosophicalhacker.philhackernews;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+
+import com.philosophicalhacker.philhackernews.ui.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

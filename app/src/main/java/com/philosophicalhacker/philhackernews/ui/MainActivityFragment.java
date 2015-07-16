@@ -1,7 +1,8 @@
-package com.philosophicalhacker.philhackernews;
+package com.philosophicalhacker.philhackernews.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
+import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 
@@ -42,7 +45,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        injectDependencies(view);
+        injectDependencies(view, getLoaderManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
         mStoryRepository.loadTopStories();
@@ -64,10 +67,10 @@ public class MainActivityFragment extends Fragment {
     //----------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------
-    private void injectDependencies(View view) {
+    private void injectDependencies(View view, LoaderManager loaderMangaer) {
         ButterKnife.bind(this, view);
         PhilHackerNewsApplication application = (PhilHackerNewsApplication) getActivity().getApplication();
-        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(this));
+        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(loaderMangaer));
         plus.inject(this);
     }
 
