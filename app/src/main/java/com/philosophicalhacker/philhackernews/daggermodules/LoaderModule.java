@@ -24,7 +24,7 @@ import rx.observables.ConnectableObservable;
 /**
  * Created by MattDupree on 7/16/15.
  */
-@Module(injects = MainActivityFragment.class)
+@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class)
 public class LoaderModule {
 
     private static final int API_STORY_LOADER = 0;
@@ -32,11 +32,6 @@ public class LoaderModule {
 
     public LoaderModule(Fragment fragment) {
         mFragment = fragment;
-    }
-
-    @Provides
-    Context provideContext() {
-        return mFragment.getActivity();
     }
 
     @Provides
@@ -69,14 +64,6 @@ public class LoaderModule {
                 });
             }
         }).publish();
-    }
-
-    @Provides
-    HackerNewsRestAdapter provideHackerNewsRestAdapter() {
-        RestAdapter build = new RestAdapter.Builder()
-                .setEndpoint("https://hacker-news.firebaseio.com/v0")
-                .build();
-        return build.create(HackerNewsRestAdapter.class);
     }
 
     @Provides

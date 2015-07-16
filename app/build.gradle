@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.philosophicalhacker.philhackernews"
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner 'com.philosophicalhacker.philhackernews.DaggerModuleOverridingAndroidJUnitRunner'
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1

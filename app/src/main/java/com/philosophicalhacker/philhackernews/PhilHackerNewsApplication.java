@@ -11,13 +11,14 @@ public class PhilHackerNewsApplication extends Application {
 
     private ObjectGraph mObjectGraph;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mObjectGraph = ObjectGraph.create(Modules.list());
+    public final ObjectGraph getObjectGraph() {
+        if (mObjectGraph == null) {
+            mObjectGraph = makeObjectGraph();
+        }
+        return mObjectGraph;
     }
 
-    public ObjectGraph getObjectGraph() {
-        return mObjectGraph;
+    protected ObjectGraph makeObjectGraph() {
+        return mObjectGraph = ObjectGraph.create(Modules.list(getApplicationContext()));
     }
 }
