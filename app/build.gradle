@@ -22,6 +22,7 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
         exclude 'APK LICENSE.txt'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 
@@ -33,8 +34,21 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.3'
     // Set this dependency to build and run Espresso tests
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2'
+    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
     compile 'com.squareup.dagger:dagger:1.2.2'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'io.reactivex:rxjava:1.0.12'
+    compile 'com.squareup.dagger:dagger-compiler:1.2.2'
+}
+
+configurations.all {
+    resolutionStrategy.force 'com.squareup:javawriter:2.5.0'
 }
 
 configurations {

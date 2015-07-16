@@ -5,6 +5,6 @@ package com.philosophicalhacker.philhackernews;
  */
 public class Modules {
     public static Object[] list() {
-        return new Object[0];
+        return new Object[] {};
     }
 }
