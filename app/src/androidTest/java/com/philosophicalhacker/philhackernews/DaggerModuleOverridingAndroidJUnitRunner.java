@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * Created by MattDupree on 7/16/15.
  */
-class DaggerModuleOverridingAndroidJUnitRunner extends AndroidJUnitRunner {
+public class DaggerModuleOverridingAndroidJUnitRunner extends AndroidJUnitRunner {
 
     @Override
     public void onCreate(Bundle arguments) {

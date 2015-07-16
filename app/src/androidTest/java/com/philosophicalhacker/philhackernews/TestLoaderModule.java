@@ -17,7 +17,7 @@ import dagger.Provides;
  * Created by MattDupree on 7/16/15.
  */
 @Module(overrides = true, library = true, complete = false)
-class TestLoaderModule {
+public class TestLoaderModule {
     @Provides
     HackerNewsRestAdapter provideHackerNewsRestAdapter() {
         final Gson gson = new Gson();
