@@ -12,11 +12,6 @@ import android.util.Log;
 public class DaggerModuleOverridingAndroidJUnitRunner extends AndroidJUnitRunner {
 
     @Override
-    public void onCreate(Bundle arguments) {
-        super.onCreate(arguments);
-    }
-
-    @Override
     public Application newApplication(ClassLoader cl, String className, Context context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         String canonicalName = TestApplication.class.getCanonicalName();
         Log.d("class name", canonicalName);
