@@ -1,5 +1,8 @@
 package com.philosophicalhacker.philhackernews.data;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import java.util.List;
 
 import rx.Subscriber;
@@ -12,9 +15,12 @@ import rx.observables.ConnectableObservable;
 public class ConnectivityAwareStoryRepository implements StoryRepository {
 
     private ConnectableObservable<List<Integer>> mStoriesObservable;
+    private ConnectivityManager mConnectivityManager;
 
-    public ConnectivityAwareStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable) {
+    public ConnectivityAwareStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable,
+                                            ConnectivityManager connectivityManager) {
         mStoriesObservable = apiStoriesObservable;
+        mConnectivityManager = connectivityManager;
     }
 
     @Override
@@ -24,6 +30,13 @@ public class ConnectivityAwareStoryRepository implements StoryRepository {
 
     @Override
     public void loadTopStories() {
-        mStoriesObservable.connect();
+        if (isConnected()) {
+            mStoriesObservable.connect();
+        }
+    }
+
+    private boolean isConnected() {
+        NetworkInfo activeNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

@@ -1,6 +1,7 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.support.v4.app.LoaderManager;
 
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
@@ -46,8 +47,9 @@ public class LoaderModule {
     }
 
     @Provides
-    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> storiesObservable) {
-        return new ConnectivityAwareStoryRepository(storiesObservable);
+    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> storiesObservable,
+                                           ConnectivityManager connectivityManager) {
+        return new ConnectivityAwareStoryRepository(storiesObservable, connectivityManager);
     }
 
 }

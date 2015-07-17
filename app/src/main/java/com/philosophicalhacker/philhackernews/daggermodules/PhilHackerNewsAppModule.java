@@ -1,6 +1,7 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import com.philosophicalhacker.philhackernews.data.HackerNewsRestAdapter;
 
@@ -33,5 +34,10 @@ public class PhilHackerNewsAppModule {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         return build.create(HackerNewsRestAdapter.class);
+    }
+
+    @Provides
+    ConnectivityManager provideConnectivityManager(Context context) {
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }
