@@ -23,10 +23,6 @@ public class MainActivityTests {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Before
-    public void overrideDaggerModules() {
-    }
-
     @Test
     public void loadHackerNewsPostsOnStartup() {
         onView(withText("9897306")).check(matches(isDisplayed()));
