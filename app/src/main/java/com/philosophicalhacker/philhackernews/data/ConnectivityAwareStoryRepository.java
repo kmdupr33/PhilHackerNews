@@ -14,24 +14,29 @@ import rx.observables.ConnectableObservable;
  */
 public class ConnectivityAwareStoryRepository implements StoryRepository {
 
-    private ConnectableObservable<List<Integer>> mStoriesObservable;
+    private ConnectableObservable<List<Integer>> mRemoteStoriesObservable;
     private ConnectivityManager mConnectivityManager;
+    private ConnectableObservable<List<Integer>> mCachedStoriesObservable;
 
     public ConnectivityAwareStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable,
+                                            ConnectableObservable<List<Integer>> cachedStoriesObservable,
                                             ConnectivityManager connectivityManager) {
-        mStoriesObservable = apiStoriesObservable;
+        mRemoteStoriesObservable = apiStoriesObservable;
         mConnectivityManager = connectivityManager;
+        mCachedStoriesObservable = cachedStoriesObservable;
     }
 
     @Override
     public Subscription addStoriesSubscriber(Subscriber<List<Integer>> observer) {
-        return mStoriesObservable.subscribe(observer);
+        return mRemoteStoriesObservable.subscribe(observer);
     }
 
     @Override
     public void loadTopStories() {
         if (isConnected()) {
-            mStoriesObservable.connect();
+            mRemoteStoriesObservable.connect();
+        } else {
+            mCachedStoriesObservable.connect();
         }
     }
 

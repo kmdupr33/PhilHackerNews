@@ -9,7 +9,7 @@ import java.util.List;
  * Created by MattDupree on 7/16/15.
  */
 public class StoryLoader extends AsyncTaskLoader<List<Integer>> {
-    private final HackerNewsRestAdapter mHackerNewsRestAdapter;
+    private final HackerNewsDataSource mHackerNewsDataSource;
     private List<Integer> mTopStories;
 
     /**
@@ -17,11 +17,11 @@ public class StoryLoader extends AsyncTaskLoader<List<Integer>> {
      * across multiple activities it's dangerous to store the context directly.
      *
      * @param context used to retrieve the application context.
-     * @param hackerNewsRestAdapter
+     * @param hackerNewsDataSource
      */
-    public StoryLoader(Context context, HackerNewsRestAdapter hackerNewsRestAdapter) {
+    public StoryLoader(Context context, HackerNewsDataSource hackerNewsDataSource) {
         super(context);
-        mHackerNewsRestAdapter = hackerNewsRestAdapter;
+        mHackerNewsDataSource = hackerNewsDataSource;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class StoryLoader extends AsyncTaskLoader<List<Integer>> {
 
     @Override
     public List<Integer> loadInBackground() {
-        mTopStories = mHackerNewsRestAdapter.getTopStories();
+        mTopStories = mHackerNewsDataSource.getTopStories();
         return mTopStories;
     }
 }

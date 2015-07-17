@@ -7,7 +7,7 @@ import retrofit.http.GET;
 /**
  * Created by MattDupree on 7/16/15.
  */
-public interface HackerNewsRestAdapter {
+public interface HackerNewsDataSource {
 
     @GET("/topstories.json")
     List<Integer> getTopStories();

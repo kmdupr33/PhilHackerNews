@@ -3,7 +3,6 @@ package com.philosophicalhacker.philhackernews;
 import android.net.ConnectivityManager;
 
 import com.philosophicalhacker.philhackernews.data.ConnectivityAwareStoryRepository;
-import com.philosophicalhacker.philhackernews.data.HackerNewsCache;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,18 +29,18 @@ public class ConnectivityAwareStoryRepositoryTests {
     ConnectableObservable<List<Integer>> mStoriesObservable;
 
     @Mock
-    HackerNewsCache mHackerNewsCache;
+    ConnectableObservable<List<Integer>> mCachedStoriesObservable;
 
     @Test
     public void attemptsToLoadDataFromCacheWhenDeviceIsNotConnected() {
         //Arrange
         when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(null);
-        ConnectivityAwareStoryRepository connectivityAwareStoryRepository = new ConnectivityAwareStoryRepository(mStoriesObservable, mConnectivityManager);
+        ConnectivityAwareStoryRepository connectivityAwareStoryRepository = new ConnectivityAwareStoryRepository(mStoriesObservable, mCachedStoriesObservable, mConnectivityManager);
 
         //Act
         connectivityAwareStoryRepository.loadTopStories();
 
         //Assert
-        verify(mHackerNewsCache).loadTopStories();
+        verify(mCachedStoriesObservable).connect();
     }
 }

@@ -1,17 +1,17 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.v4.app.LoaderManager;
 
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
 import com.philosophicalhacker.philhackernews.data.ConnectivityAwareStoryRepository;
-import com.philosophicalhacker.philhackernews.data.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.StoryLoader;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 
 import java.util.List;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -23,7 +23,7 @@ import rx.observables.ConnectableObservable;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class)
+@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class, complete = false)
 public class LoaderModule {
 
     private static final int API_STORY_LOADER = 0;
@@ -38,18 +38,23 @@ public class LoaderModule {
         return mLoaderManager;
     }
 
-    @Provides
-    ConnectableObservable<List<Integer>> provideApiStoriesObservable(final LoaderManager loaderManager,
-                                                                   final Context context,
-                                                                   final HackerNewsRestAdapter hackerNewsRestAdapter) {
-        StoryLoader storyLoader = new StoryLoader(context, hackerNewsRestAdapter);
+    @Provides @Named("remote")
+    ConnectableObservable<List<Integer>> provideApiStoriesObservable(LoaderManager loaderManager,
+                                                                   @Named("remote") StoryLoader storyLoader) {
+        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader)).publish();
+    }
+
+    @Provides @Named("cached")
+    ConnectableObservable<List<Integer>> provideCachedStoriesObservable(LoaderManager loaderManager,
+                                                                        @Named("cached") StoryLoader storyLoader) {
         return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader)).publish();
     }
 
     @Provides
-    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> storiesObservable,
+    StoryRepository provideStoryRepository(@Named("remote") ConnectableObservable<List<Integer>> apiStoriesObservable,
+                                           @Named("cached") ConnectableObservable<List<Integer>> cachedStoriesObservable,
                                            ConnectivityManager connectivityManager) {
-        return new ConnectivityAwareStoryRepository(storiesObservable, connectivityManager);
+        return new ConnectivityAwareStoryRepository(apiStoriesObservable, cachedStoriesObservable, connectivityManager);
     }
 
 }
