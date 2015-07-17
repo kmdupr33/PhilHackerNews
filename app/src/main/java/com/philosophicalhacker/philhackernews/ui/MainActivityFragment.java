@@ -1,5 +1,6 @@
 package com.philosophicalhacker.philhackernews.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -93,7 +94,7 @@ public class MainActivityFragment extends Fragment {
     //----------------------------------------------------------------------------------
     // Nested Inner Class
     //----------------------------------------------------------------------------------
-    private static class StoriesAdapter extends RecyclerView.Adapter {
+    static class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
         private final List<Integer> mStories;
 
         public StoriesAdapter(List<Integer> stories) {
@@ -101,19 +102,32 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RecyclerView.ViewHolder(new TextView(parent.getContext())) {};
+        public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final Context context = parent.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View itemView = inflater.inflate(R.layout.story_list_item, parent, false);
+            return new StoryViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            TextView itemView = (TextView) holder.itemView;
-            itemView.setText(String.valueOf(mStories.get(position)));
+        public void onBindViewHolder(StoryViewHolder holder, int position) {
+            holder.mTextView.setText(String.valueOf(mStories.get(position)));
         }
 
         @Override
         public int getItemCount() {
             return mStories.size();
+        }
+
+        static class StoryViewHolder extends RecyclerView.ViewHolder {
+
+            @Bind(R.id.upvotesTextView)
+            TextView mTextView;
+
+            public StoryViewHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
         }
     }
 }
