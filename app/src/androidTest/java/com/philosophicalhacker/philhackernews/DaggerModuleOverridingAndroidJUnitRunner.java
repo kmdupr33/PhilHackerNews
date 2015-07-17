@@ -3,7 +3,6 @@ package com.philosophicalhacker.philhackernews;
 import android.app.Application;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnitRunner;
-import android.util.Log;
 
 /**
  * Created by MattDupree on 7/16/15.
