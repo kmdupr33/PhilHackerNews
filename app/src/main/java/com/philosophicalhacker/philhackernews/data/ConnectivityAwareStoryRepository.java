@@ -35,6 +35,9 @@ public class ConnectivityAwareStoryRepository implements StoryRepository {
         }
     }
 
+    //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
     private boolean isConnected() {
         NetworkInfo activeNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
