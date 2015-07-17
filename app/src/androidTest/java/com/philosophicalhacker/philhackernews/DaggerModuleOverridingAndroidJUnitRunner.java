@@ -2,7 +2,6 @@ package com.philosophicalhacker.philhackernews;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.test.runner.AndroidJUnitRunner;
 import android.util.Log;
 
