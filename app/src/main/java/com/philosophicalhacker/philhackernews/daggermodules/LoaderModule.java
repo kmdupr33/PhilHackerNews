@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.LoaderDataConverter;
+import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
@@ -40,8 +40,8 @@ public class LoaderModule {
     @Provides
     ConnectableObservable<List<Integer>> provideApiStoriesObservable(LoaderManager loaderManager,
                                                                    CursorLoader storyLoader,
-                                                                     LoaderDataConverter<List<Integer>, Cursor> cursorLoaderDataConverter) {
-        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorLoaderDataConverter)).publish();
+                                                                     DataConverter<List<Integer>, Cursor> cursorDataConverter) {
+        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter)).publish();
     }
 
 

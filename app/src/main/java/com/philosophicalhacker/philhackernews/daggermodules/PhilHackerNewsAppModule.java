@@ -1,14 +1,14 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.CursorToStoryIdsLoaderDataConverter;
+import com.philosophicalhacker.philhackernews.data.CursorToStoryIdsConverter;
 import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
-import com.philosophicalhacker.philhackernews.data.LoaderDataConverter;
+import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsContentProvider;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsDatabaseOpenHelper;
@@ -49,6 +49,11 @@ public class PhilHackerNewsAppModule {
     }
 
     @Provides
+    ContentResolver provideContentResolver(Context context) {
+        return context.getContentResolver();
+    }
+
+    @Provides
     HackerNewsDataSource privideHackerNewsDataSource() {
         RestAdapter build = new RestAdapter.Builder()
                 .setEndpoint("https://hacker-news.firebaseio.com/v0")
@@ -64,8 +69,8 @@ public class PhilHackerNewsAppModule {
     }
 
     @Provides
-    LoaderDataConverter<List<Integer>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
-        return new CursorToStoryIdsLoaderDataConverter();
+    DataConverter<List<Integer>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
+        return new CursorToStoryIdsConverter();
     }
 
     @Provides

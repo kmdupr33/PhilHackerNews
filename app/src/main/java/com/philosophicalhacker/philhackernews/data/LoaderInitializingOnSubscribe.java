@@ -15,16 +15,16 @@ public class LoaderInitializingOnSubscribe<T, U> implements Observable.OnSubscri
     private int mLoadId;
     private final LoaderManager mLoaderManager;
     private Loader<U> mLoader;
-    private LoaderDataConverter<T, U> mLoaderDataConverter;
+    private DataConverter<T, U> mDataConverter;
 
     public LoaderInitializingOnSubscribe(int loadId,
                                          LoaderManager loaderManager,
                                          Loader<U> loader,
-                                         LoaderDataConverter<T, U> loaderDataConverter) {
+                                         DataConverter<T, U> dataConverter) {
         mLoadId = loadId;
         mLoaderManager = loaderManager;
         mLoader = loader;
-        mLoaderDataConverter = loaderDataConverter;
+        mDataConverter = dataConverter;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class LoaderInitializingOnSubscribe<T, U> implements Observable.OnSubscri
 
             @Override
             public void onLoadFinished(Loader<U> loader, U data) {
-                subscriber.onNext(mLoaderDataConverter.convertLoaderData(data));
+                subscriber.onNext(mDataConverter.convertData(data));
             }
 
             @Override
