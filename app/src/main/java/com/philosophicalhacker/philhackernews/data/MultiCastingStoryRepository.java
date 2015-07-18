@@ -7,14 +7,16 @@ import rx.Subscription;
 import rx.observables.ConnectableObservable;
 
 /**
+ * StoryRepository that allows multiple RxJava subscribers to subscribe to data loading events.
+ *
  * Created by MattDupree on 7/16/15.
  */
-public class ConnectivityAwareStoryRepository implements StoryRepository {
+public class MultiCastingStoryRepository implements StoryRepository {
 
     private ConnectableObservable<List<Integer>> mStoriesObservable;
 
-    public ConnectivityAwareStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable) {
-        mStoriesObservable = apiStoriesObservable;
+    public MultiCastingStoryRepository(ConnectableObservable<List<Integer>> storiesObservable) {
+        mStoriesObservable = storiesObservable;
     }
 
     @Override

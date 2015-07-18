@@ -1,14 +1,14 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
-import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
-import com.philosophicalhacker.philhackernews.data.ConnectivityAwareStoryRepository;
-import com.philosophicalhacker.philhackernews.data.HackerNewsRestAdapter;
+import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
-import com.philosophicalhacker.philhackernews.data.StoryLoader;
+import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import rx.observables.ConnectableObservable;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class)
+@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class, complete = false)
 public class LoaderModule {
 
     private static final int API_STORY_LOADER = 0;
@@ -38,16 +38,16 @@ public class LoaderModule {
     }
 
     @Provides
-    ConnectableObservable<List<Integer>> provideApiStoriesObservable(final LoaderManager loaderManager,
-                                                                   final Context context,
-                                                                   final HackerNewsRestAdapter hackerNewsRestAdapter) {
-        StoryLoader storyLoader = new StoryLoader(context, hackerNewsRestAdapter);
-        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader)).publish();
+    ConnectableObservable<List<Integer>> provideApiStoriesObservable(LoaderManager loaderManager,
+                                                                   CursorLoader storyLoader,
+                                                                     DataConverter<List<Integer>, Cursor> cursorDataConverter) {
+        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter)).publish();
     }
 
+
     @Provides
-    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> storiesObservable) {
-        return new ConnectivityAwareStoryRepository(storiesObservable);
+    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable) {
+        return new MultiCastingStoryRepository(apiStoriesObservable);
     }
 
 }
