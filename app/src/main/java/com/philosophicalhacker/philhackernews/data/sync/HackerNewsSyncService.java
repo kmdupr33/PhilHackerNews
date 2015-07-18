@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
-import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
-import com.philosophicalhacker.philhackernews.data.content.HackerNewsDataCache;
+import com.philosophicalhacker.philhackernews.data.content.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
+import com.philosophicalhacker.philhackernews.data.DataFetcher;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.ObjectGraph;
 
@@ -17,11 +19,11 @@ import dagger.ObjectGraph;
  */
 public class HackerNewsSyncService extends Service {
 
-    @Inject
-    HackerNewsDataSource mHackerNewsDataSource;
+    @Inject @Named(RemoteDataFetcher.DAGGER_INJECT_QUALIFIER)
+    DataFetcher mHackerNewsRestAdapter;
 
-    @Inject
-    HackerNewsDataCache mHackerNewsDataCache;
+    @Inject @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
+    DataFetcher mDataFetcher;
 
     private static HackerNewsSyncAdapter sSyncAdapter = null;
     // Object to use as a thread-safe lock
@@ -34,7 +36,7 @@ public class HackerNewsSyncService extends Service {
         objectGraph.inject(this);
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new HackerNewsSyncAdapter(this, true, mHackerNewsDataSource, mHackerNewsDataCache);
+                sSyncAdapter = new HackerNewsSyncAdapter(this, true, mHackerNewsRestAdapter, mDataFetcher);
             }
         }
     }

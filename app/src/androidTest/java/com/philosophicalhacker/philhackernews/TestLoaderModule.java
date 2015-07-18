@@ -3,7 +3,7 @@ package com.philosophicalhacker.philhackernews;
 import android.support.test.espresso.core.deps.guava.reflect.TypeToken;
 
 import com.google.gson.Gson;
-import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
+import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.lang.reflect.Type;
@@ -22,9 +22,9 @@ import retrofit.http.Path;
 @Module(overrides = true, library = true, complete = false)
 public class TestLoaderModule {
     @Provides
-    HackerNewsDataSource provideHackerNewsRestAdapter() {
+    HackerNewsRestAdapter provideHackerNewsRestAdapter() {
         final Gson gson = new Gson();
-        return new HackerNewsDataSource() {
+        return new HackerNewsRestAdapter() {
             @Override
             public List<Integer> getTopStories() {
                 Type listType = new TypeToken<List<Integer>>() {

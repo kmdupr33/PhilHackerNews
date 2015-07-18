@@ -3,13 +3,9 @@ package com.philosophicalhacker.philhackernews.data.content;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
-import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
 
 import javax.inject.Inject;
 

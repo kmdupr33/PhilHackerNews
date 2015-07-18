@@ -11,9 +11,8 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
-import com.philosophicalhacker.philhackernews.data.content.HackerNewsDataCache;
+import com.philosophicalhacker.philhackernews.data.DataFetcher;
 import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
@@ -24,22 +23,24 @@ import java.util.List;
  */
 public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    private final HackerNewsDataSource mRemoteHackerNewsDataSource;
-    private final HackerNewsDataCache mHackerNewsDataCache;
+    public static final String EXTRA_KEY_TOP_STORIES_LIMIT = "EXTRA_KEY_TOP_STORIES_LIMIT";
+    private final DataFetcher mRemoteDataFetcher;
+    private final DataFetcher mCachedDataFetcher;
 
     public HackerNewsSyncAdapter(Context context, boolean autoInitialize,
-                                 HackerNewsDataSource remoteHackerNewsDataSource,
-                                 HackerNewsDataCache hackerNewsDataCache) {
+                                 DataFetcher remoteDataFetcher,
+                                 DataFetcher cachedDataFetcher) {
         super(context, autoInitialize);
-        mRemoteHackerNewsDataSource = remoteHackerNewsDataSource;
-        mHackerNewsDataCache = hackerNewsDataCache;
+        mRemoteDataFetcher = remoteDataFetcher;
+        mCachedDataFetcher = cachedDataFetcher;
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        List<Integer> topStories = mRemoteHackerNewsDataSource.getTopStories();
-        List<Integer> cachedTopStories = mHackerNewsDataCache.getTopStories();
-        for (int i = 0; i < 20; i++) {
+        int limit = extras.getInt(EXTRA_KEY_TOP_STORIES_LIMIT, Integer.MAX_VALUE);
+        List<Integer> topStories = mRemoteDataFetcher.getTopStories(limit);
+        List<Integer> cachedTopStories = mCachedDataFetcher.getTopStories();
+        for (int i = 0; i < topStories.size(); i++) {
             Integer storyId = topStories.get(i);
             /*
             Unfortunately, the hackernews api doesn't return a list of stories. It only returns a list
@@ -49,7 +50,7 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
             TODO Consider writing AppEngine based rest api that simply exposes HackerNews api in a more
             mobile friendly manner.
              */
-            Story story = mRemoteHackerNewsDataSource.getStory(storyId);
+            Story story = mRemoteDataFetcher.getStory(storyId);
             ContentValues contentValues = getContentValuesForStory(story);
 
             /*

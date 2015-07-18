@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.data;
+package com.philosophicalhacker.philhackernews.data.remote;
 
 import com.philosophicalhacker.philhackernews.model.Story;
 
@@ -10,7 +10,7 @@ import retrofit.http.Path;
 /**
  * Created by MattDupree on 7/16/15.
  */
-public interface HackerNewsDataSource {
+public interface HackerNewsRestAdapter {
 
     @GET("/topstories.json")
     List<Integer> getTopStories();

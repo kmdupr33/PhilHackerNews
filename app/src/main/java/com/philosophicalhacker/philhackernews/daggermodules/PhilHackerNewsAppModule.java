@@ -7,14 +7,19 @@ import android.net.ConnectivityManager;
 import android.support.v4.content.CursorLoader;
 
 import com.philosophicalhacker.philhackernews.data.CursorToStoryIdsConverter;
-import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
+import com.philosophicalhacker.philhackernews.data.DataFetcher;
+import com.philosophicalhacker.philhackernews.data.content.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsContentProvider;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsDatabaseOpenHelper;
+import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.data.sync.HackerNewsSyncService;
 
 import java.util.List;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -54,12 +59,22 @@ public class PhilHackerNewsAppModule {
     }
 
     @Provides
-    HackerNewsDataSource privideHackerNewsDataSource() {
+    HackerNewsRestAdapter privideHackerNewsDataSource() {
         RestAdapter build = new RestAdapter.Builder()
                 .setEndpoint("https://hacker-news.firebaseio.com/v0")
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-        return build.create(HackerNewsDataSource.class);
+        return build.create(HackerNewsRestAdapter.class);
+    }
+
+    @Provides @Named(RemoteDataFetcher.DAGGER_INJECT_QUALIFIER)
+    DataFetcher provideRemoteDataFetcher(HackerNewsRestAdapter hackerNewsRestAdapter) {
+        return new RemoteDataFetcher(hackerNewsRestAdapter);
+    }
+
+    @Provides @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
+    DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Integer>, Cursor> dataConverter) {
+        return new CachedDataFetcher(contentResolver, dataConverter);
     }
 
     @Provides
