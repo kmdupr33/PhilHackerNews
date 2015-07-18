@@ -59,7 +59,8 @@ public class PhilHackerNewsAppModule {
 
     @Provides
     CursorLoader provideStoryLoader(Context context) {
-        return new CursorLoader(context, HackerNewsData.Stories.CONTENT_URI, null, null, null, "score DESC");
+        String sortOrder = HackerNewsData.Stories.SCORE + " DESC";
+        return new CursorLoader(context, HackerNewsData.Stories.CONTENT_URI, null, null, null, sortOrder);
     }
 
     @Provides
