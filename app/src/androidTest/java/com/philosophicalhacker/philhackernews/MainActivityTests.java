@@ -67,11 +67,16 @@ public class MainActivityTests {
 
         @Override
         public boolean isIdleNow() {
-            if(ContentResolver.isSyncPending(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY) || ContentResolver.isSyncActive(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY)) {
-                return false;
+            boolean idle = isSyncComplete();
+            if(idle) {
+                mResourceCallback.onTransitionToIdle();
             }
-            mResourceCallback.onTransitionToIdle();
-            return true;
+            return idle;
+        }
+
+        private boolean isSyncComplete() {
+            return !ContentResolver.isSyncPending(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY)
+                    && !ContentResolver.isSyncActive(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY);
         }
 
         @Override
