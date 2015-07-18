@@ -74,14 +74,17 @@ public class MainActivityTests {
             return idle;
         }
 
-        private boolean isSyncComplete() {
-            return !ContentResolver.isSyncPending(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY)
-                    && !ContentResolver.isSyncActive(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY);
-        }
-
         @Override
         public void registerIdleTransitionCallback(ResourceCallback resourceCallback) {
             mResourceCallback = resourceCallback;
+        }
+
+        //----------------------------------------------------------------------------------
+        // Helpers
+        //----------------------------------------------------------------------------------
+        private boolean isSyncComplete() {
+            return !ContentResolver.isSyncPending(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY)
+                    && !ContentResolver.isSyncActive(MainActivity.mAccount, HackerNewsData.CONTENT_AUTHORITY);
         }
     }
 }
