@@ -19,7 +19,6 @@ public class HackerNewsContentProvider extends ContentProvider {
 
     @Inject
     HackerNewsDatabaseOpenHelper mSQLiteOpenHelper;
-    private Uri mUri;
 
     @Override
     public boolean onCreate() {
@@ -55,13 +54,6 @@ public class HackerNewsContentProvider extends ContentProvider {
         mSQLiteOpenHelper.getWritableDatabase().insert(HackerNewsData.Stories.TABLE_NAME, null, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return uri;
-    }
-
-    @Override
-    public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
-        int numInserted = super.bulkInsert(uri, values);
-        getContext().getContentResolver().notifyChange(uri, null);
-        return numInserted;
     }
 
     @Override
