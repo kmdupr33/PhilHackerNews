@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ACCOUNT_TYPE = "philosophicalhacker.com";
     // The account name
     public static final String ACCOUNT = "dummyaccount";
-    private Account mAccount;
+    public static Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
