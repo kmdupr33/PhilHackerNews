@@ -1,17 +1,14 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
-import android.net.ConnectivityManager;
 import android.support.v4.app.LoaderManager;
 
-import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
-import com.philosophicalhacker.philhackernews.data.ConnectivityAwareStoryRepository;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
+import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryLoader;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
 
 import java.util.List;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -38,23 +35,16 @@ public class LoaderModule {
         return mLoaderManager;
     }
 
-    @Provides @Named("remote")
+    @Provides
     ConnectableObservable<List<Integer>> provideApiStoriesObservable(LoaderManager loaderManager,
-                                                                   @Named("remote") StoryLoader storyLoader) {
+                                                                   StoryLoader storyLoader) {
         return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader)).publish();
     }
 
-    @Provides @Named("cached")
-    ConnectableObservable<List<Integer>> provideCachedStoriesObservable(LoaderManager loaderManager,
-                                                                        @Named("cached") StoryLoader storyLoader) {
-        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader)).publish();
-    }
 
     @Provides
-    StoryRepository provideStoryRepository(@Named("remote") ConnectableObservable<List<Integer>> apiStoriesObservable,
-                                           @Named("cached") ConnectableObservable<List<Integer>> cachedStoriesObservable,
-                                           ConnectivityManager connectivityManager) {
-        return new ConnectivityAwareStoryRepository(apiStoriesObservable, cachedStoriesObservable, connectivityManager);
+    StoryRepository provideStoryRepository(ConnectableObservable<List<Integer>> apiStoriesObservable) {
+        return new MultiCastingStoryRepository(apiStoriesObservable);
     }
 
 }

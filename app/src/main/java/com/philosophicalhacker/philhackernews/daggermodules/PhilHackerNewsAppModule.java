@@ -3,11 +3,8 @@ package com.philosophicalhacker.philhackernews.daggermodules;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-import com.philosophicalhacker.philhackernews.data.HackerNewsCache;
 import com.philosophicalhacker.philhackernews.data.HackerNewsDataSource;
 import com.philosophicalhacker.philhackernews.data.StoryLoader;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -36,7 +33,7 @@ public class PhilHackerNewsAppModule {
         return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    @Provides @Named("remote")
+    @Provides
     HackerNewsDataSource privideHackerNewsDataSource() {
         RestAdapter build = new RestAdapter.Builder()
                 .setEndpoint("https://hacker-news.firebaseio.com/v0")
@@ -44,14 +41,9 @@ public class PhilHackerNewsAppModule {
                 .build();
         return build.create(HackerNewsDataSource.class);
     }
-    
-    @Provides @Named("cached")
-    HackerNewsDataSource provideHackerNewsDataSource() {
-        return new HackerNewsCache();
-    }
 
-    @Provides @Named("remote")
-    StoryLoader provideStoryLoader(Context context, @Named("remote") HackerNewsDataSource hackerNewsDataSource) {
+    @Provides
+    StoryLoader provideStoryLoader(Context context, HackerNewsDataSource hackerNewsDataSource) {
         return new StoryLoader(context, hackerNewsDataSource);
     }
 }
