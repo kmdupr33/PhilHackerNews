@@ -1,6 +1,5 @@
 package com.philosophicalhacker.philhackernews.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
@@ -92,52 +90,4 @@ public class MainActivityFragment extends Fragment {
         }
     };
 
-    //----------------------------------------------------------------------------------
-    // Nested Inner Class
-    //----------------------------------------------------------------------------------
-    static class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-        private final List<Story> mStories;
-
-        public StoriesAdapter(List<Story> stories) {
-            mStories = stories;
-        }
-
-        @Override
-        public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final Context context = parent.getContext();
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View itemView = inflater.inflate(R.layout.story_list_item, parent, false);
-            return new StoryViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(StoryViewHolder holder, int position) {
-            Story story = mStories.get(position);
-            holder.mUpvotesTextView.setText(String.valueOf(story.getScore()));
-            holder.mStoryTitleTextView.setText(story.getTitle());
-            holder.mAuthorTextView.setText(story.getAuthor());
-        }
-
-        @Override
-        public int getItemCount() {
-            return mStories.size();
-        }
-
-        static class StoryViewHolder extends RecyclerView.ViewHolder {
-
-            @Bind(R.id.upvotesTextView)
-            TextView mUpvotesTextView;
-
-            @Bind(R.id.storyTitleTextView)
-            TextView mStoryTitleTextView;
-
-            @Bind(R.id.authorTextView)
-            TextView mAuthorTextView;
-
-            public StoryViewHolder(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
-        }
-    }
 }
