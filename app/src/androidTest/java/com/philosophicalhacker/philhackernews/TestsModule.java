@@ -1,12 +1,15 @@
 package com.philosophicalhacker.philhackernews;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.test.espresso.core.deps.guava.reflect.TypeToken;
 
 import com.google.gson.Gson;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsDatabaseOpenHelper;
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.model.Story;
-import com.philosophicalhacker.philhackernews.ui.MainActivity;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +23,12 @@ import retrofit.http.Path;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(overrides = true, library = true, complete = false, injects = MainActivityTests.class)
+@Module(overrides = true,
+        library = true,
+        complete = false,
+        injects = {MainActivityTests.class,
+                CachingTests.class}
+        )
 public class TestsModule {
     @Provides
     HackerNewsRestAdapter provideHackerNewsRestAdapter() {
@@ -41,11 +49,20 @@ public class TestsModule {
                     story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
                 } else {
                     Random random = new Random();
-                    int score = random.nextInt(1001);
+                    int score = random.nextInt(999);
                     story = new Story(id, score, "Dummy Story", "Who Cares?");
                 }
                 return story;
             }
         };
+    }
+    @Provides
+    HackerNewsDatabaseOpenHelper provideHackerNewsDatabaseOpenHelper(Context context) {
+        return new HackerNewsDatabaseOpenHelper(context, "test_hackernewsdata.db", null, 1);
+    }
+
+    @Provides
+    File provideHackerNewsDatabaseFile(SQLiteDatabase sqLiteDatabase) {
+        return new File(sqLiteDatabase.getPath());
     }
 }

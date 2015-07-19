@@ -3,6 +3,7 @@ package com.philosophicalhacker.philhackernews.daggermodules;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.CursorLoader;
 
 import com.philosophicalhacker.philhackernews.data.CursorToStoryConverter;
@@ -20,6 +21,7 @@ import com.philosophicalhacker.philhackernews.model.Story;
 import java.util.List;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -71,8 +73,14 @@ public class DataModule {
         return new CursorToStoryConverter();
     }
 
+    @Singleton
     @Provides
     HackerNewsDatabaseOpenHelper provideHackerNewsDatabaseOpenHelper(Context context) {
         return new HackerNewsDatabaseOpenHelper(context, "hackernewsdata.db", null, 1);
+    }
+
+    @Provides
+    SQLiteDatabase provideHackerNewsDatabase(HackerNewsDatabaseOpenHelper hackerNewsDatabaseOpenHelper) {
+        return hackerNewsDatabaseOpenHelper.getWritableDatabase();
     }
 }

@@ -9,9 +9,16 @@ import android.support.test.runner.AndroidJUnitRunner;
  */
 public class DaggerModuleOverridingAndroidJUnitRunner extends AndroidJUnitRunner {
 
+    private Application mApplication;
+
     @Override
     public Application newApplication(ClassLoader cl, String className, Context context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         String testApplicationClassName = TestApplication.class.getCanonicalName();
-        return super.newApplication(cl, testApplicationClassName, context);
+        mApplication = super.newApplication(cl, testApplicationClassName, context);
+        return mApplication;
+    }
+
+    public TestApplication getApplication() {
+        return (TestApplication) mApplication;
     }
 }

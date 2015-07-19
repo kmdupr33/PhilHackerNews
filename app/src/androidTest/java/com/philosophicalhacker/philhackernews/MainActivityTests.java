@@ -1,5 +1,6 @@
 package com.philosophicalhacker.philhackernews;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
@@ -14,6 +15,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -40,6 +43,9 @@ public class MainActivityTests {
     @Inject
     DataSynchronizer mDataSynchronizer;
 
+    @Inject
+    File mHackerNewsDatabaseFile;
+
     private SyncAdapterIdlingResource mSyncAdapterIdlingResource;
 
     @Before
@@ -52,7 +58,8 @@ public class MainActivityTests {
 
     @After
     public void unregisterIdlingResources() {
-//        Espresso.unregisterIdlingResources(mSyncAdapterIdlingResource);
+        Espresso.unregisterIdlingResources(mSyncAdapterIdlingResource);
+        SQLiteDatabase.deleteDatabase(mHackerNewsDatabaseFile);
     }
 
     //----------------------------------------------------------------------------------

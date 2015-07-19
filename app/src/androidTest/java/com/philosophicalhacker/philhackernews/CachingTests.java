@@ -2,11 +2,18 @@ package com.philosophicalhacker.philhackernews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 import android.test.InstrumentationTestCase;
+
+import java.io.File;
+
+import javax.inject.Inject;
+
+import dagger.ObjectGraph;
 
 /**
  * Created by MattDupree on 7/17/15.
@@ -19,11 +26,20 @@ public class CachingTests extends InstrumentationTestCase {
     private static final String PHILHACKERNEWS_APP = "com.philosophicalhacker.philhackernews";
     private UiDevice mDevice;
 
+    @Inject
+    File mHackerNewsDatabaseFile;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mDevice = UiDevice.getInstance(getInstrumentation());
+        DaggerModuleOverridingAndroidJUnitRunner instrumentation = (DaggerModuleOverridingAndroidJUnitRunner) getInstrumentation();
+        mDevice = UiDevice.getInstance(instrumentation);
+        //noinspection ResourceType
+        ObjectGraph objectGraph = instrumentation.getApplication().getObjectGraph();
+        objectGraph.inject(this);
     }
+
+
 
     public void testMainActivityShowsStoriesFromCache() {
         launchApp(PHILHACKERNEWS_APP);
@@ -37,6 +53,7 @@ public class CachingTests extends InstrumentationTestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         toggleAirplaneMode();
+        SQLiteDatabase.deleteDatabase(mHackerNewsDatabaseFile);
     }
 
     //----------------------------------------------------------------------------------
@@ -58,7 +75,7 @@ public class CachingTests extends InstrumentationTestCase {
     }
 
     private void verifyStoryDataIsVisible() {
-        assertNotNull(mDevice.wait(Until.findObject(By.text("9897306")), UI_ELEMENT_TIMEOUT));
+        assertNotNull(mDevice.wait(Until.findObject(By.text("999+")), UI_ELEMENT_TIMEOUT));
     }
 
     private UiObject2 onMoreNetworksButton() {

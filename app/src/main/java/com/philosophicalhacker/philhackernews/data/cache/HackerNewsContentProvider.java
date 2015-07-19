@@ -3,6 +3,7 @@ package com.philosophicalhacker.philhackernews.data.cache;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
@@ -14,7 +15,7 @@ import dagger.ObjectGraph;
 public class HackerNewsContentProvider extends ContentProvider {
 
     @Inject
-    HackerNewsDatabaseOpenHelper mSQLiteOpenHelper;
+    SQLiteDatabase mHackerNewsDatabase;
 
     @Override
     public boolean onCreate() {
@@ -27,7 +28,7 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Cursor cursor = mSQLiteOpenHelper.getWritableDatabase().query(HackerNewsData.Stories.TABLE_NAME,
+        Cursor cursor = mHackerNewsDatabase.query(HackerNewsData.Stories.TABLE_NAME,
                                                                       projection,
                                                                       selection,
                                                                       selectionArgs, null, null,
@@ -51,7 +52,7 @@ public class HackerNewsContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        mSQLiteOpenHelper.getWritableDatabase().insert(HackerNewsData.Stories.TABLE_NAME, null, values);
+        mHackerNewsDatabase.insert(HackerNewsData.Stories.TABLE_NAME, null, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return uri;
     }
@@ -59,7 +60,7 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        int numRowsAffected = mSQLiteOpenHelper.getWritableDatabase().update(HackerNewsData.Stories.TABLE_NAME,
+        int numRowsAffected = mHackerNewsDatabase.update(HackerNewsData.Stories.TABLE_NAME,
                                                                               values,
                                                                               HackerNewsData.Stories._ID + " = ?",
                                                                               new String[]{uri.getLastPathSegment()});
