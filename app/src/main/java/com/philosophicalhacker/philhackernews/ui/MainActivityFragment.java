@@ -1,8 +1,10 @@
 package com.philosophicalhacker.philhackernews.ui;
 
+import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dagger.ObjectGraph;
+import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 
@@ -37,10 +40,14 @@ public class MainActivityFragment extends Fragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.swipeToRefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @SuppressWarnings("WeakerAccess")
     @Inject
     StoryRepository mStoryRepository;
 
+    @SuppressWarnings("WeakerAccess")
     @Inject
     DataSynchronizer mDataSynchronizer;
 
@@ -52,9 +59,12 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         injectDependencies(view, getLoaderManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));
         mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
         mStoryRepository.loadTopStories();
-        mDataSynchronizer.requestTopStoriesSync();
+        if (savedInstanceState == null) {
+            mDataSynchronizer.requestTopStoriesSync();
+        }
         return view;
     }
 
@@ -93,7 +103,26 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onNext(final List<Story> stories) {
             mRecyclerView.setAdapter(new StoriesAdapter(stories));
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
         }
     };
 
+    //----------------------------------------------------------------------------------
+    // Nested Inner Class
+    //----------------------------------------------------------------------------------
+    private static class SyncOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+
+        private DataSynchronizer mDataSynchronizer;
+
+        public SyncOnRefreshListener(DataSynchronizer dataSynchronizer) {
+            mDataSynchronizer = dataSynchronizer;
+        }
+
+        @Override
+        public void onRefresh() {
+            mDataSynchronizer.requestTopStoriesSync();
+        }
+    }
 }

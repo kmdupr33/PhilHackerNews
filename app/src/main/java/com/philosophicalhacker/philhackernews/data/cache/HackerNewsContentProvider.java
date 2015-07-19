@@ -59,9 +59,11 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        return mSQLiteOpenHelper.getWritableDatabase().update(HackerNewsData.Stories.TABLE_NAME,
-                                                              values,
-                                                              HackerNewsData.Stories._ID + " = ?",
-                                                              new String[]{uri.getLastPathSegment()});
+        int numRowsAffected = mSQLiteOpenHelper.getWritableDatabase().update(HackerNewsData.Stories.TABLE_NAME,
+                                                                              values,
+                                                                              HackerNewsData.Stories._ID + " = ?",
+                                                                              new String[]{uri.getLastPathSegment()});
+        getContext().getContentResolver().notifyChange(uri, null);
+        return numRowsAffected;
     }
 }

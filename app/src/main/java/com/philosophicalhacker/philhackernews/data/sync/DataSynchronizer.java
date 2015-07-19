@@ -2,12 +2,16 @@ package com.philosophicalhacker.philhackernews.data.sync;
 
 import android.accounts.Account;
 import android.content.ContentResolver;
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Makes requests to synchronize cached device data with remote api data.
@@ -25,6 +29,12 @@ public class DataSynchronizer {
         mAccount = account;
     }
 
+    /**
+     *
+     * @return an observable that reports changes in the sync request status. Possible emited values are
+     * {@link ContentResolver#SYNC_OBSERVER_TYPE_ACTIVE}, {@link ContentResolver#SYNC_OBSERVER_TYPE_PENDING},
+     * and {@link ContentResolver#SYNC_OBSERVER_TYPE_SETTINGS}
+     */
     public void requestTopStoriesSync() {
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
