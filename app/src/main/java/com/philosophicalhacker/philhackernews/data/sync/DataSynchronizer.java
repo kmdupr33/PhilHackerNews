@@ -14,14 +14,14 @@ import javax.inject.Inject;
  *
  * Created by MattDupree on 7/19/15.
  */
-public class DataSyncronizer {
+public class DataSynchronizer {
 
-    private static final String TAG = DataSyncronizer.class.getSimpleName();
+    private static final String TAG = DataSynchronizer.class.getSimpleName();
 
     private Account mAccount;
 
     @Inject
-    public DataSyncronizer(Account account) {
+    public DataSynchronizer(Account account) {
         mAccount = account;
     }
 

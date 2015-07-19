@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
-import com.philosophicalhacker.philhackernews.data.sync.DataSyncronizer;
+import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.model.Story;
 
@@ -42,7 +42,7 @@ public class MainActivityFragment extends Fragment {
     StoryRepository mStoryRepository;
 
     @Inject
-    DataSyncronizer mDataSyncronizer;
+    DataSynchronizer mDataSynchronizer;
 
     private Subscription mSubscription;
 
@@ -54,7 +54,7 @@ public class MainActivityFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
         mStoryRepository.loadTopStories();
-        mDataSyncronizer.requestTopStoriesSync();
+        mDataSynchronizer.requestTopStoriesSync();
         return view;
     }
 

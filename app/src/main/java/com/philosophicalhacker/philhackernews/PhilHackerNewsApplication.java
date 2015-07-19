@@ -12,6 +12,7 @@ import dagger.ObjectGraph;
 
 /**
  * Initializes the Dagger object graph for latter use.
+ * Registers dummy account for sync adapter.
  *
  * Created by MattDupree on 7/16/15.
  */

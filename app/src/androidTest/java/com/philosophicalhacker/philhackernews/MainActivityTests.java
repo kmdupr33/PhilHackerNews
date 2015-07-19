@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.philosophicalhacker.philhackernews.data.sync.DataSyncronizer;
+import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.ui.MainActivity;
 
 import org.junit.After;
@@ -38,7 +38,7 @@ public class MainActivityTests {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Inject
-    DataSyncronizer mDataSyncronizer;
+    DataSynchronizer mDataSynchronizer;
 
     private SyncAdapterIdlingResource mSyncAdapterIdlingResource;
 
@@ -46,7 +46,7 @@ public class MainActivityTests {
     public void registerIdlingResource() {
         PhilHackerNewsApplication application = (PhilHackerNewsApplication) mActivityTestRule.getActivity().getApplication();
         application.getObjectGraph().inject(this);
-        mSyncAdapterIdlingResource = new SyncAdapterIdlingResource(mDataSyncronizer);
+        mSyncAdapterIdlingResource = new SyncAdapterIdlingResource(mDataSynchronizer);
         Espresso.registerIdlingResources(mSyncAdapterIdlingResource);
     }
 
@@ -86,11 +86,11 @@ public class MainActivityTests {
 
         private ResourceCallback mResourceCallback;
 
-        public SyncAdapterIdlingResource(DataSyncronizer dataSyncronizer) {
-            mDataSyncronizer = dataSyncronizer;
+        public SyncAdapterIdlingResource(DataSynchronizer dataSynchronizer) {
+            mDataSynchronizer = dataSynchronizer;
         }
 
-        private DataSyncronizer mDataSyncronizer;
+        private DataSynchronizer mDataSynchronizer;
 
         @Override
         public String getName() {
@@ -99,7 +99,7 @@ public class MainActivityTests {
 
         @Override
         public boolean isIdleNow() {
-            boolean idle = !mDataSyncronizer.isSyncActiveOrPending();
+            boolean idle = !mDataSynchronizer.isSyncActiveOrPending();
             if(idle) {
                 mResourceCallback.onTransitionToIdle();
             }
