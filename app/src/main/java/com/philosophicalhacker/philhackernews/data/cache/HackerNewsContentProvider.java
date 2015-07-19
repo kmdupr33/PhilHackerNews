@@ -27,7 +27,11 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Cursor cursor = mSQLiteOpenHelper.getWritableDatabase().query(HackerNewsData.Stories.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = mSQLiteOpenHelper.getWritableDatabase().query(HackerNewsData.Stories.TABLE_NAME,
+                                                                      projection,
+                                                                      selection,
+                                                                      selectionArgs, null, null,
+                                                                      sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -55,6 +59,9 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        return mSQLiteOpenHelper.getWritableDatabase().update(HackerNewsData.Stories.TABLE_NAME, values, HackerNewsData.Stories._ID + " = ?", new String[]{uri.getLastPathSegment()});
+        return mSQLiteOpenHelper.getWritableDatabase().update(HackerNewsData.Stories.TABLE_NAME,
+                                                              values,
+                                                              HackerNewsData.Stories._ID + " = ?",
+                                                              new String[]{uri.getLastPathSegment()});
     }
 }
