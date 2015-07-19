@@ -38,10 +38,10 @@ public class TestLoaderModule {
                 Story story;
                 if (id == 9897329) {
                     //Guarantee that this story will be at the top of the list.
-                    story = new Story(id, Integer.MAX_VALUE, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
+                    story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
                 } else {
-                    Random random = new Random(1);
-                    int score = random.nextInt();
+                    Random random = new Random();
+                    int score = random.nextInt(1001);
                     story = new Story(id, score, "Dummy Story", "Who Cares?");
                 }
                 return story;

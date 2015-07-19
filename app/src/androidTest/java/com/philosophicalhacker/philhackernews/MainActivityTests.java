@@ -36,7 +36,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 @LargeTest
 public class MainActivityTests {
 
-    public static final String DUMMY_STORY_POINTS = "99+";
+    public static final String DUMMY_STORY_POINTS = "999+";
     public static final String DUMMY_STORY_TITLE = "Why Hacker News is Awesomer than your News";
     public static final String DUMMY_STORY_AUTHOR = "PhilosophicalHacker";
 

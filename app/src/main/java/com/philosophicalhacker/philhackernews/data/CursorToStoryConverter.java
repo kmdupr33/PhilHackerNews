@@ -16,7 +16,8 @@ public class CursorToStoryConverter implements DataConverter<List<Story>, Cursor
     @Override
     public List<Story> convertData(Cursor data) {
         List<Story> storyIds = new ArrayList<>(data.getCount());
-        data.moveToFirst();
+        //Ensure cursor is positioned before its first row
+        data.moveToPosition(-1);
         while (data.moveToNext()) {
             int id = data.getInt(0);
             int score = data.getInt(1);
