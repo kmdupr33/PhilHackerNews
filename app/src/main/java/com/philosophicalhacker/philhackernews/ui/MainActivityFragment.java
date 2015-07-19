@@ -1,6 +1,5 @@
 package com.philosophicalhacker.philhackernews.ui;
 
-import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -15,8 +14,8 @@ import android.widget.Toast;
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
-import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dagger.ObjectGraph;
-import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 
