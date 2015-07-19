@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:gravity="center"
         android:layout_marginStart="@dimen/large_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:text="11"
+        tools:text="99+"
         android:id="@+id/upvotesTextView"
         android:padding="@dimen/small_padding"
         android:background="@drawable/circle"
