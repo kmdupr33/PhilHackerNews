@@ -10,6 +10,6 @@ import dagger.ObjectGraph;
 public class TestApplication extends PhilHackerNewsApplication {
     @Override
     protected ObjectGraph makeObjectGraph() {
-        return ObjectGraph.create(new PhilHackerNewsAppModule(getApplicationContext()), new TestLoaderModule());
+        return ObjectGraph.create(new PhilHackerNewsAppModule(getApplicationContext()), new TestsModule());
     }
 }

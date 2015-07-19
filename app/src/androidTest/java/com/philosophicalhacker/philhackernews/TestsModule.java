@@ -20,8 +20,8 @@ import retrofit.http.Path;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(overrides = true, library = true, complete = false)
-public class TestLoaderModule {
+@Module(overrides = true, library = true, complete = false, injects = MainActivityTests.class)
+public class TestsModule {
     @Provides
     HackerNewsRestAdapter provideHackerNewsRestAdapter() {
         final Gson gson = new Gson();
