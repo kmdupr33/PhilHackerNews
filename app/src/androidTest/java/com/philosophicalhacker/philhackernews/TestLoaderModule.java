@@ -5,6 +5,7 @@ import android.support.test.espresso.core.deps.guava.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.ui.MainActivity;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -37,10 +38,11 @@ public class TestLoaderModule {
                 Story story;
                 if (id == 9897329) {
                     //Guarantee that this story will be at the top of the list.
-                    story = new Story(id, Integer.MAX_VALUE);
+                    story = new Story(id, Integer.MAX_VALUE, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
                 } else {
                     Random random = new Random(1);
-                    story = new Story(id, random.nextInt());
+                    int score = random.nextInt();
+                    story = new Story(id, score, "Dummy Story", "Who Cares?");
                 }
                 return story;
             }

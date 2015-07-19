@@ -36,6 +36,10 @@ import static org.hamcrest.CoreMatchers.containsString;
 @LargeTest
 public class MainActivityTests {
 
+    public static final String DUMMY_STORY_POINTS = "99+";
+    public static final String DUMMY_STORY_TITLE = "Why Hacker News is Awesomer than your News";
+    public static final String DUMMY_STORY_AUTHOR = "PhilosophicalHacker";
+
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     private SyncAdapterIdlingResource mSyncAdapterIdlingResource;
@@ -70,9 +74,9 @@ public class MainActivityTests {
     // Helpers
     //----------------------------------------------------------------------------------
     private void verifyDummyDataIsDisplayed() {
-        onView(withText("99+")).check(matches(isDisplayed()));
-        onView(withText("Why Hacker News is Awesomer than your News")).check(matches(isDisplayed()));
-        onView(withText("PhilosophicalHacker")).check(matches(isDisplayed()));
+        onView(withText(DUMMY_STORY_POINTS)).check(matches(isDisplayed()));
+        onView(withText(DUMMY_STORY_TITLE)).check(matches(isDisplayed()));
+        onView(withText(DUMMY_STORY_AUTHOR)).check(matches(isDisplayed()));
     }
 
     //----------------------------------------------------------------------------------
