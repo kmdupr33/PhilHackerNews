@@ -34,8 +34,15 @@ public class TestLoaderModule {
 
             @Override
             public Story getStory(@Path("id") int id) {
-                Random random = new Random(1);
-                return new Story(id, random.nextInt());
+                Story story;
+                if (id == 9897329) {
+                    //Guarantee that this story will be at the top of the list.
+                    story = new Story(id, Integer.MAX_VALUE);
+                } else {
+                    Random random = new Random(1);
+                    story = new Story(id, random.nextInt());
+                }
+                return story;
             }
         };
     }

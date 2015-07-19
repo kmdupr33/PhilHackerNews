@@ -57,14 +57,22 @@ public class MainActivityTests {
     @Test
     public void loadHackerNewsPostsOnStartup() {
         onView(withClassName(containsString("RecyclerView"))).check(matches(isDisplayed()));
-        onView(withText("9897306")).check(matches(isDisplayed()));
+        verifyDummyDataIsDisplayed();
     }
 
     @Test
     public void dataStillDisplaysAfterOrientationChange() {
         onView(isRoot()).perform(OrientationChangeAction.orientationLandscape());
-        onView(withClassName(containsString("RecyclerView"))).check(matches(isDisplayed()));
-        onView(withText("9897306")).check(matches(isDisplayed()));
+        verifyDummyDataIsDisplayed();
+    }
+
+    //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
+    private void verifyDummyDataIsDisplayed() {
+        onView(withText("99+")).check(matches(isDisplayed()));
+        onView(withText("Why Hacker News is Awesomer than your News")).check(matches(isDisplayed()));
+        onView(withText("PhilosophicalHacker")).check(matches(isDisplayed()));
     }
 
     //----------------------------------------------------------------------------------
