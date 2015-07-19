@@ -29,16 +29,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAccount = createSyncAccount(this);
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_TOP_STORIES_LIMIT, 20);
-        if (!ContentResolver.isSyncActive(null, HackerNewsData.CONTENT_AUTHORITY)) {
-            ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
+        if (savedInstanceState == null) {
+            requestTopStoriesSync();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
     /**
      * Create a new dummy account for the sync adapter
      *
@@ -81,5 +78,14 @@ public class MainActivity extends AppCompatActivity {
             //Call failed. See docs for possible reasons
         }
         return newAccount;
+    }
+
+    private void requestTopStoriesSync() {
+        mAccount = createSyncAccount(this);
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_TOP_STORIES_LIMIT, 20);
+        ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 }
