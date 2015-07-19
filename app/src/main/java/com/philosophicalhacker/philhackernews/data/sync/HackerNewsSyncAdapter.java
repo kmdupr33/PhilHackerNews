@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
 import com.philosophicalhacker.philhackernews.model.Story;
 

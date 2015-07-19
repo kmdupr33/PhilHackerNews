@@ -3,17 +3,15 @@ package com.philosophicalhacker.philhackernews.ui;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.sync.HackerNewsSyncAdapter;
 
 

@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.data.content;
+package com.philosophicalhacker.philhackernews.data.cache;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.data.content;
+package com.philosophicalhacker.philhackernews.data.cache;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

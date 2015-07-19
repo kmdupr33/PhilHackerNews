@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
-import com.philosophicalhacker.philhackernews.data.content.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
 

@@ -45,7 +45,7 @@
         </service>
 
         <provider
-            android:name=".data.content.HackerNewsContentProvider"
+            android:name=".data.cache.HackerNewsContentProvider"
             android:authorities="com.philosophicalhacker.philhackernews.provider"
             android:syncable="true"
             android:enabled="true"

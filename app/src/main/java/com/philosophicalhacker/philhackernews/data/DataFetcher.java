@@ -1,6 +1,6 @@
 package com.philosophicalhacker.philhackernews.data;
 
-import com.philosophicalhacker.philhackernews.data.content.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.model.Story;
 

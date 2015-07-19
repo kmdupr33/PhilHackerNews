@@ -1,11 +1,6 @@
 package com.philosophicalhacker.philhackernews;
 
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.SyncInfo;
-import android.content.SyncStatusObserver;
-import android.content.pm.ActivityInfo;
-import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
@@ -13,7 +8,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.ui.MainActivity;
 
 import org.junit.After;
@@ -21,8 +16,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
