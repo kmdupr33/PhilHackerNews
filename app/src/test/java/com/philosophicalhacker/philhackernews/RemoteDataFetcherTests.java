@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
+import com.philosophicalhacker.philhackernews.model.Story;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ public class RemoteDataFetcherTests {
     public void limitsNumberOfStoriesReturnedToTwenty() {
         when(mHackerNewsRestAdapter.getTopStories()).thenReturn(makeRandomList());
         RemoteDataFetcher remoteDataFetcher = new RemoteDataFetcher(mHackerNewsRestAdapter);
-        List<Integer> topStories = remoteDataFetcher.getTopStories(20);
+        List<Story> topStories = remoteDataFetcher.getTopStories(20);
         assertEquals(20, topStories.size());
     }
 
