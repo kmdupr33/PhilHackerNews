@@ -48,9 +48,9 @@ public class TestsModule {
                     //Guarantee that this story will be at the top of the list.
                     story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
                 } else {
-                    Random random = new Random();
-                    int score = random.nextInt(999);
-                    story = new Story(id, score, "Dummy Story", "Who Cares?");
+                        Random random = new Random();
+                        int score = random.nextInt(999);
+                        story = new Story(id, score, "Dummy Story", "Who Cares?");
                 }
                 return story;
             }

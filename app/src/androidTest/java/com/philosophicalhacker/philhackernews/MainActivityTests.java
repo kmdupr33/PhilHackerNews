@@ -22,9 +22,11 @@ import javax.inject.Inject;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
@@ -75,6 +77,12 @@ public class MainActivityTests {
     public void dataStillDisplaysAfterOrientationChange() {
         onView(isRoot()).perform(OrientationChangeAction.orientationLandscape());
         verifyDummyDataIsDisplayed();
+    }
+
+    @Test
+    public void loadSecondPageWhenScrolledToBottom() {
+        onView(withId(R.id.recyclerView)).perform(scrollToPosition(19));
+        onView(withText("A Story From the Second Page")).check(matches(isDisplayed()));
     }
 
     //----------------------------------------------------------------------------------
