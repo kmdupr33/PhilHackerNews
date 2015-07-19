@@ -14,5 +14,7 @@ public interface HackerNewsData {
         String STORIES_PATH = TABLE_NAME;
         Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(STORIES_PATH).build();
         String SCORE = "score";
+        String TITLE = "title";
+        String AUTHOR = "author";
     }
 }

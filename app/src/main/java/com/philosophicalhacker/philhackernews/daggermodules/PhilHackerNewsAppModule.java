@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.CursorToStoryIdsConverter;
+import com.philosophicalhacker.philhackernews.data.CursorToStoryConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
 import com.philosophicalhacker.philhackernews.data.content.CachedDataFetcher;
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
@@ -16,6 +16,7 @@ import com.philosophicalhacker.philhackernews.data.content.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.content.HackerNewsDatabaseOpenHelper;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.data.sync.HackerNewsSyncService;
+import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class PhilHackerNewsAppModule {
     }
 
     @Provides @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
-    DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Integer>, Cursor> dataConverter) {
+    DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Story>, Cursor> dataConverter) {
         return new CachedDataFetcher(contentResolver, dataConverter);
     }
 
@@ -84,8 +85,8 @@ public class PhilHackerNewsAppModule {
     }
 
     @Provides
-    DataConverter<List<Integer>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
-        return new CursorToStoryIdsConverter();
+    DataConverter<List<Story>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
+        return new CursorToStoryConverter();
     }
 
     @Provides

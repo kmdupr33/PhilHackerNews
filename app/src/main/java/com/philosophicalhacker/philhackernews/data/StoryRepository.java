@@ -1,5 +1,7 @@
 package com.philosophicalhacker.philhackernews.data;
 
+import com.philosophicalhacker.philhackernews.model.Story;
+
 import java.util.List;
 
 import rx.Subscriber;
@@ -10,7 +12,7 @@ import rx.Subscription;
  */
 public interface StoryRepository {
 
-    Subscription addStoriesSubscriber(Subscriber<List<Integer>> observer);
+    Subscription addStoriesSubscriber(Subscriber<List<Story>> storiesSubscriber);
 
     void loadTopStories();
 }

@@ -13,9 +13,9 @@ import java.util.List;
  * Created by MattDupree on 7/18/15.
  */
 public interface DataFetcher {
-    List<Integer> getTopStories(int limit);
+    List<Story> getTopStories(int limit);
 
-    List<Integer> getTopStories();
+    List<Story> getTopStories();
 
-    Story getStory(Integer storyId);
+    Story getStory(int storyId);
 }

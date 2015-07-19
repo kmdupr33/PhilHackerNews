@@ -38,4 +38,23 @@ public class Story {
     public String getAuthor() {
         return author;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof Story)) {
+            return false;
+        }
+
+        Story story = (Story) o;
+        return id == story.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

@@ -16,6 +16,7 @@ import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class MainActivityFragment extends Fragment {
         plus.inject(this);
     }
 
-    Subscriber<List<Integer>> mStoriesSubscriber = new Subscriber<List<Integer>>() {
+    Subscriber<List<Story>> mStoriesSubscriber = new Subscriber<List<Story>>() {
         @Override
         public void onCompleted() {
         }
@@ -86,7 +87,7 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        public void onNext(final List<Integer> stories) {
+        public void onNext(final List<Story> stories) {
             mRecyclerView.setAdapter(new StoriesAdapter(stories));
         }
     };
@@ -95,9 +96,9 @@ public class MainActivityFragment extends Fragment {
     // Nested Inner Class
     //----------------------------------------------------------------------------------
     static class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-        private final List<Integer> mStories;
+        private final List<Story> mStories;
 
-        public StoriesAdapter(List<Integer> stories) {
+        public StoriesAdapter(List<Story> stories) {
             mStories = stories;
         }
 
@@ -111,7 +112,10 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(StoryViewHolder holder, int position) {
-            holder.mTextView.setText(String.valueOf(mStories.get(position)));
+            Story story = mStories.get(position);
+            holder.mUpvotesTextView.setText(String.valueOf(story.getScore()));
+            holder.mStoryTitleTextView.setText(story.getTitle());
+            holder.mAuthorTextView.setText(story.getAuthor());
         }
 
         @Override
@@ -122,7 +126,13 @@ public class MainActivityFragment extends Fragment {
         static class StoryViewHolder extends RecyclerView.ViewHolder {
 
             @Bind(R.id.upvotesTextView)
-            TextView mTextView;
+            TextView mUpvotesTextView;
+
+            @Bind(R.id.storyTitleTextView)
+            TextView mStoryTitleTextView;
+
+            @Bind(R.id.authorTextView)
+            TextView mAuthorTextView;
 
             public StoryViewHolder(View itemView) {
                 super(itemView);

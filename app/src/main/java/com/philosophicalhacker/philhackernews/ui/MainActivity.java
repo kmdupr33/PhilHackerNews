@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import com.philosophicalhacker.philhackernews.data.sync.HackerNewsSyncAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     // Constants
     // An account type, in the form of a domain name
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_TOP_STORIES_LIMIT, 20);
+        Log.d(TAG, "Requesting data sync for account: " + mAccount);
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 }
