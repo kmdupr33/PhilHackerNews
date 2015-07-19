@@ -5,8 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/large_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="11"
         android:id="@+id/upvotesTextView"
@@ -14,8 +16,5 @@
         android:background="@drawable/circle"
         android:textColor="@android:color/white"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/large_margin"
-        android:layout_marginStart="@dimen/large_margin"/>
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
