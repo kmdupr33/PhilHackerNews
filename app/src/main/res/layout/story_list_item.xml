@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeightLarge"
+    android:layout_height="100dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:gravity="center"
         android:layout_marginStart="@dimen/large_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -17,4 +17,27 @@
         android:textColor="@android:color/white"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/storyTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginStart="@dimen/small_padding"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:text="Why HackerNews is Awesomer than your news"
+        android:layout_toEndOf="@id/upvotesTextView"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/authorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="@dimen/tiny_padding"
+        android:layout_alignStart="@id/storyTitleTextView"
+        android:layout_below="@+id/storyTitleTextView"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="PhilosophicalHacker"/>
 </RelativeLayout>
