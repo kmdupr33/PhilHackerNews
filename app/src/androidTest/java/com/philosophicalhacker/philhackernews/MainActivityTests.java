@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncInfo;
 import android.content.SyncStatusObserver;
+import android.content.pm.ActivityInfo;
+import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
@@ -25,6 +27,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -48,8 +51,18 @@ public class MainActivityTests {
         Espresso.unregisterIdlingResources(mSyncAdapterIdlingResource);
     }
 
+    //----------------------------------------------------------------------------------
+    // Tests
+    //----------------------------------------------------------------------------------
     @Test
-    public void loadHackerNewsPostsOnStartup() throws InterruptedException {
+    public void loadHackerNewsPostsOnStartup() {
+        onView(withClassName(containsString("RecyclerView"))).check(matches(isDisplayed()));
+        onView(withText("9897306")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void dataStillDisplaysAfterOrientationChange() {
+        onView(isRoot()).perform(OrientationChangeAction.orientationLandscape());
         onView(withClassName(containsString("RecyclerView"))).check(matches(isDisplayed()));
         onView(withText("9897306")).check(matches(isDisplayed()));
     }
