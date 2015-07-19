@@ -39,8 +39,9 @@ public class RemoteDataFetcherTests {
     @NonNull
     private List<Integer> makeRandomList() {
         ArrayList<Integer> integers = new ArrayList<>(200);
+        Random random = new Random();
         for (int i = 0; i < 200; i++) {
-            integers.add(new Random().nextInt());
+            integers.add(random.nextInt());
         }
         return integers;
     }
