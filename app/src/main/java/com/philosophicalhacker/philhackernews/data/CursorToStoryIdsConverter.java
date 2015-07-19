@@ -13,6 +13,7 @@ public class CursorToStoryIdsConverter implements DataConverter<List<Integer>, C
     @Override
     public List<Integer> convertData(Cursor data) {
         List<Integer> storyIds = new ArrayList<>(data.getCount());
+        data.moveToFirst();
         while (data.moveToNext()) {
             int anInt = data.getInt(0);
             storyIds.add(anInt);
