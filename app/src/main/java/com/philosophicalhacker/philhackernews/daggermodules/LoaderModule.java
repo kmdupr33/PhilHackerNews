@@ -1,14 +1,18 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 
+import com.philosophicalhacker.philhackernews.data.CacheOnlyCommentRepository;
+import com.philosophicalhacker.philhackernews.data.CommentRepository;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.CommentsFragment;
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
 
 import java.util.List;
@@ -24,10 +28,14 @@ import rx.observables.ConnectableObservable;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class, complete = false)
+@Module(injects = {MainActivityFragment.class,
+        CommentsFragment.class},
+        addsTo = PhilHackerNewsAppModule.class,
+        complete = false)
 public class LoaderModule {
 
     private static final int API_STORY_LOADER = 0;
+
     private LoaderManager mLoaderManager;
 
     public LoaderModule(LoaderManager loaderManager) {
@@ -52,6 +60,12 @@ public class LoaderModule {
     @Provides
     StoryRepository provideStoryRepository(ConnectableObservable<List<Item>> apiStoriesObservable) {
         return new MultiCastingStoryRepository(apiStoriesObservable);
+    }
+
+    @Provides
+    CommentRepository provideCommentRepository(LoaderManager loaderManager, Context context,
+                                               DataConverter<List<Item>, Cursor> dataConverter) {
+        return new CacheOnlyCommentRepository(loaderManager, context, dataConverter);
     }
 
 }

@@ -22,6 +22,7 @@ public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> 
     private static final int URL_POS = 5;
     private static final int TEXT_POS = 6;
     private static final int COMMENTS_POS = 7;
+    private static final int PARENT_POS = 8;
 
     @Override
     public List<Item> convertData(Cursor data) {
@@ -37,6 +38,7 @@ public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> 
             String url = data.getString(URL_POS);
             String text = data.getString(TEXT_POS);
             String commentsString = data.getString(COMMENTS_POS);
+            int parent = data.getInt(PARENT_POS);
             String[] commentIdStrings = commentsString.split(",");
             int[] commentIds = new int[commentIdStrings.length];
             for (int i=0, end=commentIdStrings.length; i<end; i++) {
@@ -45,7 +47,8 @@ public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> 
                 }
             }
             //noinspection ResourceType - type received from database, so we assume valid value
-            itemIds.add(new Item(id, type, score, title, author, url, text, commentIds));
+            Item item = new Item(id, type, score, title, author, url, text, commentIds, parent);
+            itemIds.add(item);
         }
         return itemIds;
     }

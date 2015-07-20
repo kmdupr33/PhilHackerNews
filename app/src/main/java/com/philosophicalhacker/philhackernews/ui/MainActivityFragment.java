@@ -1,8 +1,6 @@
 package com.philosophicalhacker.philhackernews.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
 import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
@@ -24,7 +20,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import dagger.ObjectGraph;
 import rx.Subscriber;
 import rx.Subscription;
 
@@ -32,7 +27,7 @@ import rx.Subscription;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends LoaderFragment {
 
     @SuppressWarnings("WeakerAccess")
     @Bind(R.id.recyclerView)
@@ -55,7 +50,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        injectDependencies(view, getLoaderManager());
+        ButterKnife.bind(this, view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));
         mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
@@ -81,13 +76,6 @@ public class MainActivityFragment extends Fragment {
     //----------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------
-    private void injectDependencies(View view, LoaderManager loaderMangaer) {
-        ButterKnife.bind(this, view);
-        PhilHackerNewsApplication application = (PhilHackerNewsApplication) getActivity().getApplication();
-        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(loaderMangaer));
-        plus.inject(this);
-    }
-
     Subscriber<List<Item>> mStoriesSubscriber = new Subscriber<List<Item>>() {
         @Override
         public void onCompleted() {

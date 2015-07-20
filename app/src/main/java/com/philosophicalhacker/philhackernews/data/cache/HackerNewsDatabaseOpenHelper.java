@@ -23,7 +23,8 @@ public class HackerNewsDatabaseOpenHelper extends SQLiteOpenHelper {
                 + HackerNewsData.Items.AUTHOR + " TEXT, "
                 + HackerNewsData.Items.URL + " TEXT, "
                 + HackerNewsData.Items.TEXT + " TEXT, "
-                + HackerNewsData.Items.COMMENTS + " TEXT)");
+                + HackerNewsData.Items.COMMENTS + " TEXT, "
+                + HackerNewsData.Items.PARENT + ")");
     }
 
     @Override

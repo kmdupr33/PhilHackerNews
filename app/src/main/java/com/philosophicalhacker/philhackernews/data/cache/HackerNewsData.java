@@ -20,5 +20,6 @@ public interface HackerNewsData {
         String COMMENTS = "comments";
         String TEXT = "text";
         String TYPE = "type";
+        String PARENT = "parent";
     }
 }

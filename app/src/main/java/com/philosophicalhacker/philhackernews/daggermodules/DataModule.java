@@ -9,6 +9,7 @@ import android.support.v4.content.CursorLoader;
 import com.philosophicalhacker.philhackernews.data.CursorToItemConverter;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
+import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsContentProvider;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
@@ -38,6 +39,7 @@ import retrofit.RestAdapter;
             },
         complete = false)
 public class DataModule {
+
     @Provides
     ContentResolver provideContentResolver(Context context) {
         return context.getContentResolver();
@@ -64,10 +66,11 @@ public class DataModule {
 
     @Provides
     CursorLoader provideStoryLoader(Context context) {
-        String sortOrder = HackerNewsData.Items.SCORE + " DESC";
-        return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null, null, null, sortOrder);
+        return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null,
+                HackerNewsData.Items.TYPE + "= ?", new String[] {Item.TYPE_STORY}, ItemRepository.SCORE_DESC_SORT_ORDER);
     }
 
+    @Singleton
     @Provides
     DataConverter<List<Item>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
         return new CursorToItemConverter();

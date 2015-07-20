@@ -77,6 +77,7 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
         contentValues.put(HackerNewsData.Items.AUTHOR, item.getAuthor());
         contentValues.put(HackerNewsData.Items.URL, item.getUrl());
         contentValues.put(HackerNewsData.Items.TEXT, item.getText());
+        contentValues.put(HackerNewsData.Items.PARENT, item.getParent());
         StringBuilder stringBuilder = new StringBuilder();
         int[] comments = item.getComments();
         if (comments != null) {

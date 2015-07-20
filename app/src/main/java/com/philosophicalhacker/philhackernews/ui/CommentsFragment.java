@@ -2,7 +2,6 @@ package com.philosophicalhacker.philhackernews.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,20 +12,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.philosophicalhacker.philhackernews.R;
+import com.philosophicalhacker.philhackernews.data.CommentRepository;
 import com.philosophicalhacker.philhackernews.model.Item;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
 /**
  * Created by MattDupree on 7/20/15.
  */
-public class CommentsFragment extends Fragment {
+public class CommentsFragment extends LoaderFragment {
 
     private static final String ARGS_ITEM = "item";
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
+
+    @Inject
+    CommentRepository mCommentRepository;
 
     public static CommentsFragment newInstance(Item item) {
         CommentsFragment commentsFragment = new CommentsFragment();
@@ -43,7 +51,8 @@ public class CommentsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new CommentsAdapter());
+        Item item = getArguments().getParcelable(ARGS_ITEM);
+        mCommentRepository.loadCommentsForStory(item).subscribe(mCommentsSubscriber);
         return rootView;
     }
 
@@ -54,17 +63,45 @@ public class CommentsFragment extends Fragment {
     }
 
     //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
+    Subscriber<List<Item>> mCommentsSubscriber = new Subscriber<List<Item>>() {
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onNext(List<Item> items) {
+            mRecyclerView.setAdapter(new CommentsAdapter(items));
+        }
+    };
+
+    //----------------------------------------------------------------------------------
     // Nested Inner Class
     //----------------------------------------------------------------------------------
     private static class CommentsAdapter extends RecyclerView.Adapter {
+        private List<Item> mItems;
+
+        public CommentsAdapter(List<Item> items) {
+            mItems = items;
+        }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RecyclerView.ViewHolder(new TextView(parent.getContext())) {};
+            return new RecyclerView.ViewHolder(new TextView(parent.getContext())) {
+            };
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ((TextView) holder.itemView).setText("test " + position);
+            Item item = mItems.get(position);
+            ((TextView) holder.itemView).setText(item.getText());
         }
 
         @Override

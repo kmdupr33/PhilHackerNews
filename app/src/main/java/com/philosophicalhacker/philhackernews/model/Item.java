@@ -24,14 +24,15 @@ public class Item implements Parcelable {
     private String text;
     @SerializedName("kids")
     private int[] comments;
+    private int parent;
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({TYPE_STORY, TYPE_COMMENT})
     public @interface ItemType {}
+
     public static final String TYPE_STORY = "story";
     public static final String TYPE_COMMENT = "comment";
-
-    public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds) {
+    public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds, int parent) {
         this.id = id;
         this.type = type;
         this.score = score;
@@ -40,6 +41,7 @@ public class Item implements Parcelable {
         this.url = url;
         this.text = text;
         this.comments = commentIds;
+        this.parent = parent;
     }
 
     protected Item(Parcel in) {
@@ -51,6 +53,7 @@ public class Item implements Parcelable {
         url = in.readString();
         text = in.readString();
         comments = in.createIntArray();
+        parent = in.readInt();
     }
 
     @Override
@@ -63,6 +66,7 @@ public class Item implements Parcelable {
         dest.writeString(url);
         dest.writeString(text);
         dest.writeIntArray(comments);
+        dest.writeInt(parent);
     }
 
     @Override
@@ -81,6 +85,10 @@ public class Item implements Parcelable {
             return new Item[size];
         }
     };
+
+    public int getParent() {
+        return parent;
+    }
 
     public String getType() {
         return type;
