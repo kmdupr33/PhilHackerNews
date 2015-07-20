@@ -25,14 +25,17 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import dagger.ObjectGraph;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.functions.Func1;
+import rx.observables.ConnectableObservable;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements PageLoader {
 
     @SuppressWarnings("WeakerAccess")
     @Bind(R.id.recyclerView)
@@ -50,7 +53,12 @@ public class MainActivityFragment extends Fragment {
     DataSynchronizer mDataSynchronizer;
 
     private Subscription mSubscription;
+    private List<Story> mStories;
+    private StoriesAdapter mAdapter;
 
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,8 +66,10 @@ public class MainActivityFragment extends Fragment {
         injectDependencies(view, getLoaderManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));
-        mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
-        mStoryRepository.loadTopStories();
+        Observable<List<Story>> topStoriesObservable = mStoryRepository.getTopStoriesObservable(1,
+                                                                                                20);
+        mSubscription = topStoriesObservable.subscribe(
+                mStoriesSubscriber);
         if (savedInstanceState == null) {
             mDataSynchronizer.requestTopStoriesSync();
         }
@@ -78,13 +88,21 @@ public class MainActivityFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+    @Override
+    public ConnectableObservable<Boolean> loadPage(int page) {
+        ConnectableObservable<List<Story>> topStoriesObservable = mStoryRepository.getTopStoriesObservable(
+                page, 20).publish();
+        topStoriesObservable.subscribe(mStoriesSubscriber);
+        return topStoriesObservable.map(new DidStoriesLoadFunc1()).publish();
+    }
+
     //----------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------
-    private void injectDependencies(View view, LoaderManager loaderMangaer) {
+    private void injectDependencies(View view, LoaderManager loaderManager) {
         ButterKnife.bind(this, view);
         PhilHackerNewsApplication application = (PhilHackerNewsApplication) getActivity().getApplication();
-        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(loaderMangaer));
+        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(loaderManager));
         plus.inject(this);
     }
 
@@ -100,7 +118,15 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         public void onNext(final List<Story> stories) {
-            mRecyclerView.setAdapter(new StoriesAdapter(stories));
+            if (mStories == null) {
+                mStories = stories;
+                mAdapter = new StoriesAdapter(mStories);
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                int insertRangeStart = mStories.size();
+                mStories.addAll(stories);
+                mAdapter.notifyItemRangeInserted(insertRangeStart, stories.size());
+            }
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -121,6 +147,16 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onRefresh() {
             mDataSynchronizer.requestTopStoriesSync();
+        }
+    }
+
+    //----------------------------------------------------------------------------------
+    // Nested Inner Class
+    //----------------------------------------------------------------------------------
+    private static class DidStoriesLoadFunc1 implements Func1<List<Story>, Boolean> {
+        @Override
+        public Boolean call(List<Story> stories) {
+            return stories.size() > 0;
         }
     }
 }

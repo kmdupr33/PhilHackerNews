@@ -39,19 +39,16 @@ public class PageTurningOnScrollListener extends RecyclerView.OnScrollListener {
                     mPageNumber);
             mSubscription = pageLoadedObservable.subscribe(new Observer<Boolean>() {
                 @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                }
-
-                @Override
                 public void onNext(Boolean aBoolean) {
                     if (aBoolean) {
                         mPageNumber++;
                     }
                 }
+                @Override
+                public void onCompleted() {}
+
+                @Override
+                public void onError(Throwable e) {}
             });
             pageLoadedObservable.connect();
         }
