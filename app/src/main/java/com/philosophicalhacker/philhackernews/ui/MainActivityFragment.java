@@ -100,9 +100,13 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         public void onNext(final List<Story> stories) {
-            mRecyclerView.setAdapter(new StoriesAdapter(stories));
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
+            if (stories.size() == 0) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            } else {
+                mRecyclerView.setAdapter(new StoriesAdapter(stories));
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         }
     };

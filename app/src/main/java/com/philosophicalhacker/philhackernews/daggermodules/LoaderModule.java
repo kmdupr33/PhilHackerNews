@@ -16,6 +16,7 @@ import java.util.List;
 import dagger.Module;
 import dagger.Provides;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.ConnectableObservable;
 
 /**
@@ -42,7 +43,9 @@ public class LoaderModule {
     ConnectableObservable<List<Story>> provideApiStoriesObservable(LoaderManager loaderManager,
                                                                    CursorLoader storyLoader,
                                                                      DataConverter<List<Story>, Cursor> cursorDataConverter) {
-        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter)).publish();
+        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter))
+                .observeOn(AndroidSchedulers.mainThread())
+                .publish();
     }
 
 

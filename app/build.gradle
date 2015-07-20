@@ -34,7 +34,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'io.reactivex:rxjava:1.0.12'
     compile 'com.squareup.dagger:dagger-compiler:1.2.2'
     androidTestCompile 'com.android.support.test:runner:0.3'
     // Set this dependency to use JUnit 4 rules
@@ -49,6 +48,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    compile 'io.reactivex:rxandroid:0.25.0'
 }
 
 configurations.all {
