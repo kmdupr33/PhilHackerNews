@@ -1,6 +1,6 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          android:id="@+id/fragment"
+          android:id="@+id/container"
           android:name="com.philosophicalhacker.philhackernews.ui.MainActivityFragment"
           tools:layout="@layout/fragment_main"
           android:layout_width="match_parent"

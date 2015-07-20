@@ -16,5 +16,6 @@ public interface HackerNewsData {
         String SCORE = "score";
         String TITLE = "title";
         String AUTHOR = "author";
+        String URL = "url";
     }
 }

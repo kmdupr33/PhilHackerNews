@@ -83,7 +83,8 @@ public class MainActivityTests {
     @Test
     public void showStoryDetailsWhenStoryIsTapped() {
         onView(withId(R.id.recyclerView)).perform(actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.storyTitleTextView)).check(matches(withText(DUMMY_STORY_TITLE)));
+        onView(withText(DUMMY_STORY_TITLE)).check(matches(isDisplayed()));
+        //TODO Test that proper web content is loaded
     }
 
     //----------------------------------------------------------------------------------

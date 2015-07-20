@@ -12,8 +12,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
@@ -74,6 +74,7 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
         contentValues.put(HackerNewsData.Stories.SCORE, story.getScore());
         contentValues.put(HackerNewsData.Stories.TITLE, story.getTitle());
         contentValues.put(HackerNewsData.Stories.AUTHOR, story.getAuthor());
+        contentValues.put(HackerNewsData.Stories.URL, story.getUrl());
         return contentValues;
     }
 }

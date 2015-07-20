@@ -37,7 +37,7 @@ class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder
 
     @Override
     public void onBindViewHolder(StoryViewHolder holder, int position) {
-        Story story = mStories.get(position);
+        final Story story = mStories.get(position);
         String scoreText;
         int score = story.getScore();
         if (score > 999) {
@@ -52,8 +52,8 @@ class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent intent = new Intent(context, StoryDetailActivity.class);
-                context.startActivity(intent);
+                Intent startIntent = StoryDetailActivity.getStartIntent(context, story);
+                context.startActivity(startIntent);
             }
         });
     }

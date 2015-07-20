@@ -7,19 +7,49 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.philosophicalhacker.philhackernews.R;
+import com.philosophicalhacker.philhackernews.model.Story;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Shows a webview that points to the link within the HackerNews story.
  */
 public class StoryDetailActivityFragment extends Fragment {
+
+    private static final String ARGS_STORY = "ARGS_STORY";
+
+    public static StoryDetailActivityFragment newInstance(Story story) {
+        StoryDetailActivityFragment storyDetailActivityFragment = new StoryDetailActivityFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARGS_STORY, story);
+        storyDetailActivityFragment.setArguments(args);
+        return storyDetailActivityFragment;
+    }
+
+
+    @Bind(R.id.webView)
+    WebView mWebView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_story_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_story_detail, container, false);
+        ButterKnife.bind(this, view);
+        Story story = getArguments().getParcelable(ARGS_STORY);
+        getActivity().setTitle(story.getTitle());
+        mWebView.loadUrl(story.getUrl());
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override

@@ -17,6 +17,7 @@ public class CursorToStoryConverter implements DataConverter<List<Story>, Cursor
     public static final int SCORE_COL_POS = 1;
     public static final int TITLE_COL_POS = 2;
     public static final int AUTHOR_COL_POS = 3;
+    private static final int AUTHOR_URL_POS = 4;
 
     @Override
     public List<Story> convertData(Cursor data) {
@@ -28,7 +29,8 @@ public class CursorToStoryConverter implements DataConverter<List<Story>, Cursor
             int score = data.getInt(SCORE_COL_POS);
             String title = data.getString(TITLE_COL_POS);
             String author = data.getString(AUTHOR_COL_POS);
-            storyIds.add(new Story(id, score, title, author));
+            String url = data.getString(AUTHOR_URL_POS);
+            storyIds.add(new Story(id, score, title, author, url));
         }
         return storyIds;
     }

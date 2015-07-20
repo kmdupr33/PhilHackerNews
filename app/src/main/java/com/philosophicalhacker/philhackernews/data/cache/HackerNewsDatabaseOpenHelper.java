@@ -19,7 +19,8 @@ public class HackerNewsDatabaseOpenHelper extends SQLiteOpenHelper {
                 + "(" + HackerNewsData.Stories._ID + " INTEGER PRIMARY KEY, "
                 + HackerNewsData.Stories.SCORE + " INTEGER, "
                 + HackerNewsData.Stories.TITLE + " TEXT, "
-                + HackerNewsData.Stories.AUTHOR + " TEXT)");
+                + HackerNewsData.Stories.AUTHOR + " TEXT, "
+                + HackerNewsData.Stories.URL + " TEXT)");
     }
 
     @Override
