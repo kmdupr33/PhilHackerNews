@@ -21,8 +21,9 @@ import java.io.File;
 import javax.inject.Inject;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -80,9 +81,9 @@ public class MainActivityTests {
     }
 
     @Test
-    public void loadSecondPageWhenScrolledToBottom() {
-        onView(withId(R.id.recyclerView)).perform(scrollToPosition(19));
-        onView(withText("A Story From the Second Page")).check(matches(isDisplayed()));
+    public void showStoryDetailsWhenStoryIsTapped() {
+        onView(withId(R.id.recyclerView)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.storyTitleTextView)).check(matches(withText(DUMMY_STORY_TITLE)));
     }
 
     //----------------------------------------------------------------------------------
