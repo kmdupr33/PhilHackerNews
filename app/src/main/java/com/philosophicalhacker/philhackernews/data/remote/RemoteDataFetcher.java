@@ -1,7 +1,7 @@
 package com.philosophicalhacker.philhackernews.data.remote;
 
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class RemoteDataFetcher implements DataFetcher {
     }
 
     @Override
-    public List<Story> getTopStories(int limit) {
+    public List<Item> getTopStories(int limit) {
         /*
         This data fetcher has to be responsible for limiting the stories returned by the RestAdapter
         because the firebase api doesn't allow us to limit the data we query for without also sorting
@@ -28,7 +28,7 @@ public class RemoteDataFetcher implements DataFetcher {
         we don't want to mess that up.
          */
         List<Integer> unlimitedTopStories = mHackerNewsRestAdapter.getTopStories();
-        List<Story> limitedTopStories;
+        List<Item> limitedTopStories;
         if (limit == Integer.MAX_VALUE) {
             limitedTopStories = new ArrayList<>();
         } else {
@@ -44,19 +44,19 @@ public class RemoteDataFetcher implements DataFetcher {
             TODO Consider writing AppEngine based rest api that simply exposes HackerNews api in a more
             mobile friendly manner.
              */
-            Story story = getStory(unlimitedTopStories.get(i));
-            limitedTopStories.add(story);
+            Item item = getStory(unlimitedTopStories.get(i));
+            limitedTopStories.add(item);
         }
         return limitedTopStories;
     }
 
     @Override
-    public List<Story> getTopStories() {
+    public List<Item> getTopStories() {
         return getTopStories(Integer.MAX_VALUE);
     }
 
     @Override
-    public Story getStory(int storyId) {
+    public Item getStory(int storyId) {
         return mHackerNewsRestAdapter.getStory(storyId);
     }
 }

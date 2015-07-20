@@ -16,7 +16,7 @@ import com.philosophicalhacker.philhackernews.data.cache.HackerNewsDatabaseOpenH
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.data.sync.HackerNewsSyncService;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -58,18 +58,18 @@ public class DataModule {
     }
 
     @Provides @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
-    DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Story>, Cursor> dataConverter) {
+    DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> dataConverter) {
         return new CachedDataFetcher(contentResolver, dataConverter);
     }
 
     @Provides
     CursorLoader provideStoryLoader(Context context) {
-        String sortOrder = HackerNewsData.Stories.SCORE + " DESC";
-        return new CursorLoader(context, HackerNewsData.Stories.CONTENT_URI, null, null, null, sortOrder);
+        String sortOrder = HackerNewsData.Items.SCORE + " DESC";
+        return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null, null, null, sortOrder);
     }
 
     @Provides
-    DataConverter<List<Story>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
+    DataConverter<List<Item>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
         return new CursorToStoryConverter();
     }
 

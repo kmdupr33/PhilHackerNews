@@ -16,7 +16,7 @@ import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -88,7 +88,7 @@ public class MainActivityFragment extends Fragment {
         plus.inject(this);
     }
 
-    Subscriber<List<Story>> mStoriesSubscriber = new Subscriber<List<Story>>() {
+    Subscriber<List<Item>> mStoriesSubscriber = new Subscriber<List<Item>>() {
         @Override
         public void onCompleted() {
         }
@@ -99,7 +99,7 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        public void onNext(final List<Story> stories) {
+        public void onNext(final List<Item> stories) {
             if (stories.size() == 0) {
                 mSwipeRefreshLayout.setRefreshing(true);
             } else {

@@ -8,7 +8,7 @@ import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
 
 import java.util.List;
@@ -40,9 +40,9 @@ public class LoaderModule {
     }
 
     @Provides
-    ConnectableObservable<List<Story>> provideApiStoriesObservable(LoaderManager loaderManager,
+    ConnectableObservable<List<Item>> provideApiStoriesObservable(LoaderManager loaderManager,
                                                                    CursorLoader storyLoader,
-                                                                     DataConverter<List<Story>, Cursor> cursorDataConverter) {
+                                                                     DataConverter<List<Item>, Cursor> cursorDataConverter) {
         return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter))
                 .observeOn(AndroidSchedulers.mainThread())
                 .publish();
@@ -50,7 +50,7 @@ public class LoaderModule {
 
 
     @Provides
-    StoryRepository provideStoryRepository(ConnectableObservable<List<Story>> apiStoriesObservable) {
+    StoryRepository provideStoryRepository(ConnectableObservable<List<Item>> apiStoriesObservable) {
         return new MultiCastingStoryRepository(apiStoriesObservable);
     }
 

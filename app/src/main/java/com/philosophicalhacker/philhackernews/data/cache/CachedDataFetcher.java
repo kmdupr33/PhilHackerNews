@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -18,26 +18,26 @@ public class CachedDataFetcher implements DataFetcher {
 
     public static final String DAGGER_INJECT_QUALIFIER = "cache";
     private ContentResolver mContentResolver;
-    private DataConverter<List<Story>, Cursor> mCursorToStoryIdsConverter;
+    private DataConverter<List<Item>, Cursor> mCursorToStoryIdsConverter;
 
-    public CachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Story>, Cursor> cursorToStoryIdsConverter) {
+    public CachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> cursorToStoryIdsConverter) {
         mContentResolver = contentResolver;
         mCursorToStoryIdsConverter = cursorToStoryIdsConverter;
     }
 
     @Override
-    public List<Story> getTopStories(int limit) {
-        Cursor cursor = mContentResolver.query(HackerNewsData.Stories.CONTENT_URI, null, null, null, HackerNewsData.Stories.SCORE + " DESC");
+    public List<Item> getTopStories(int limit) {
+        Cursor cursor = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null, null, null, HackerNewsData.Items.SCORE + " DESC");
         return mCursorToStoryIdsConverter.convertData(cursor);
     }
 
     @Override
-    public List<Story> getTopStories() {
+    public List<Item> getTopStories() {
         return getTopStories(Integer.MAX_VALUE);
     }
 
     @Override
-    public Story getStory(int storyId) {
+    public Item getStory(int storyId) {
         return null;
     }
 }

@@ -15,12 +15,14 @@ public class HackerNewsDatabaseOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + HackerNewsData.Stories.TABLE_NAME
-                + "(" + HackerNewsData.Stories._ID + " INTEGER PRIMARY KEY, "
-                + HackerNewsData.Stories.SCORE + " INTEGER, "
-                + HackerNewsData.Stories.TITLE + " TEXT, "
-                + HackerNewsData.Stories.AUTHOR + " TEXT, "
-                + HackerNewsData.Stories.URL + " TEXT)");
+        db.execSQL("CREATE TABLE " + HackerNewsData.Items.TABLE_NAME
+                + "(" + HackerNewsData.Items._ID + " INTEGER PRIMARY KEY, "
+                + HackerNewsData.Items.SCORE + " INTEGER, "
+                + HackerNewsData.Items.TITLE + " TEXT, "
+                + HackerNewsData.Items.AUTHOR + " TEXT, "
+                + HackerNewsData.Items.URL + " TEXT, "
+                + HackerNewsData.Items.TEXT + " TEXT, "
+                + HackerNewsData.Items.COMMENTS + " TEXT)");
     }
 
     @Override

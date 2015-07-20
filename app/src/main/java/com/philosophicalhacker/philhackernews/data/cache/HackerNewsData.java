@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public interface HackerNewsData {
     String CONTENT_AUTHORITY = "com.philosophicalhacker.philhackernews.provider";
     Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-    interface Stories extends BaseColumns {
+    interface Items extends BaseColumns {
         String TABLE_NAME = "stories";
         String STORIES_PATH = TABLE_NAME;
         Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(STORIES_PATH).build();
@@ -17,5 +17,7 @@ public interface HackerNewsData {
         String TITLE = "title";
         String AUTHOR = "author";
         String URL = "url";
+        String COMMENTS = "comments";
+        String TEXT = "text";
     }
 }

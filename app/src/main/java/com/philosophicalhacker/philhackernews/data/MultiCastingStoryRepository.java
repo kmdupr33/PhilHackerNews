@@ -1,6 +1,6 @@
 package com.philosophicalhacker.philhackernews.data;
 
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -15,14 +15,14 @@ import rx.observables.ConnectableObservable;
  */
 public class MultiCastingStoryRepository implements StoryRepository {
 
-    private ConnectableObservable<List<Story>> mStoriesObservable;
+    private ConnectableObservable<List<Item>> mStoriesObservable;
 
-    public MultiCastingStoryRepository(ConnectableObservable<List<Story>> storiesObservable) {
+    public MultiCastingStoryRepository(ConnectableObservable<List<Item>> storiesObservable) {
         mStoriesObservable = storiesObservable;
     }
 
     @Override
-    public Subscription addStoriesSubscriber(Subscriber<List<Story>> storiesSubscriber) {
+    public Subscription addStoriesSubscriber(Subscriber<List<Item>> storiesSubscriber) {
         return mStoriesObservable.subscribe(storiesSubscriber);
     }
 

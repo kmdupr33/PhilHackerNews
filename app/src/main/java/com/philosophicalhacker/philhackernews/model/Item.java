@@ -9,28 +9,35 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created by MattDupree on 7/18/15.
  */
-public class Story implements Parcelable {
+public class Item implements Parcelable {
     private int id;
     private int score;
     private String title;
     @SerializedName("by")
     private String author;
     private String url;
+    private String text;
+    @SerializedName("kids")
+    private int[] comments;
 
-    public Story(int id, int score, String title, String author, String url) {
+    public Item(int id, int score, String title, String author, String url, String text, int[] commentIds) {
         this.id = id;
         this.score = score;
         this.title = title;
         this.author = author;
         this.url = url;
+        this.text = text;
+        this.comments = commentIds;
     }
 
-    protected Story(Parcel in) {
+    protected Item(Parcel in) {
         id = in.readInt();
         score = in.readInt();
         title = in.readString();
         author = in.readString();
         url = in.readString();
+        text = in.readString();
+        comments = in.createIntArray();
     }
 
     @Override
@@ -40,6 +47,8 @@ public class Story implements Parcelable {
         dest.writeString(title);
         dest.writeString(author);
         dest.writeString(url);
+        dest.writeString(text);
+        dest.writeIntArray(comments);
     }
 
     @Override
@@ -47,15 +56,15 @@ public class Story implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Story> CREATOR = new Creator<Story>() {
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
         @Override
-        public Story createFromParcel(Parcel in) {
-            return new Story(in);
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
         }
 
         @Override
-        public Story[] newArray(int size) {
-            return new Story[size];
+        public Item[] newArray(int size) {
+            return new Item[size];
         }
     };
 
@@ -85,16 +94,24 @@ public class Story implements Parcelable {
             return true;
         }
 
-        if (!(o instanceof Story)) {
+        if (!(o instanceof Item)) {
             return false;
         }
 
-        Story story = (Story) o;
-        return id == story.id;
+        Item item = (Item) o;
+        return id == item.id;
     }
 
     @Override
     public int hashCode() {
         return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public int[] getComments() {
+        return comments;
     }
 }

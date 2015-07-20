@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,10 +25,10 @@ public class StoryDetailActivityFragment extends Fragment {
 
     private static final String ARGS_STORY = "ARGS_STORY";
 
-    public static StoryDetailActivityFragment newInstance(Story story) {
+    public static StoryDetailActivityFragment newInstance(Item item) {
         StoryDetailActivityFragment storyDetailActivityFragment = new StoryDetailActivityFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARGS_STORY, story);
+        args.putParcelable(ARGS_STORY, item);
         storyDetailActivityFragment.setArguments(args);
         return storyDetailActivityFragment;
     }
@@ -46,12 +46,17 @@ public class StoryDetailActivityFragment extends Fragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_story_detail, container, false);
         ButterKnife.bind(this, view);
-        Story story = getArguments().getParcelable(ARGS_STORY);
+        Item item = getArguments().getParcelable(ARGS_STORY);
         if (savedInstanceState == null) {
-            getActivity().setTitle(story.getTitle());
+            getActivity().setTitle(item.getTitle());
             mWebView.setWebViewClient(new SwipeToRefreshUpdatingWebViewClient(mSwipeRefreshLayout));
             mSwipeRefreshLayout.setOnRefreshListener(new WebViewReloadingOnRefreshListener(mWebView));
-            mWebView.loadUrl(story.getUrl());
+            String url = item.getUrl();
+            if (url != null) {
+                mWebView.loadUrl(url);
+            } else {
+                mWebView.loadData(item.getText(), "text/html", "UTF-8");
+            }
         }
         return view;
     }

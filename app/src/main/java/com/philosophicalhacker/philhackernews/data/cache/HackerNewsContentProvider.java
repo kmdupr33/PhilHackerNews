@@ -28,7 +28,7 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Cursor cursor = mHackerNewsDatabase.query(HackerNewsData.Stories.TABLE_NAME,
+        Cursor cursor = mHackerNewsDatabase.query(HackerNewsData.Items.TABLE_NAME,
                                                                       projection,
                                                                       selection,
                                                                       selectionArgs, null, null,
@@ -52,7 +52,7 @@ public class HackerNewsContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        mHackerNewsDatabase.insert(HackerNewsData.Stories.TABLE_NAME, null, values);
+        mHackerNewsDatabase.insert(HackerNewsData.Items.TABLE_NAME, null, values);
         getContext().getContentResolver().notifyChange(uri, null);
         return uri;
     }
@@ -60,9 +60,9 @@ public class HackerNewsContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        int numRowsAffected = mHackerNewsDatabase.update(HackerNewsData.Stories.TABLE_NAME,
+        int numRowsAffected = mHackerNewsDatabase.update(HackerNewsData.Items.TABLE_NAME,
                                                                               values,
-                                                                              HackerNewsData.Stories._ID + " = ?",
+                                                                              HackerNewsData.Items._ID + " = ?",
                                                                               new String[]{uri.getLastPathSegment()});
         getContext().getContentResolver().notifyChange(uri, null);
         return numRowsAffected;

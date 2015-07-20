@@ -2,7 +2,7 @@ package com.philosophicalhacker.philhackernews.data;
 
 import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import java.util.List;
  * Created by MattDupree on 7/18/15.
  */
 public interface DataFetcher {
-    List<Story> getTopStories(int limit);
+    List<Item> getTopStories(int limit);
 
-    List<Story> getTopStories();
+    List<Item> getTopStories();
 
-    Story getStory(int storyId);
+    Item getStory(int storyId);
 }

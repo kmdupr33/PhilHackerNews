@@ -1,6 +1,6 @@
 package com.philosophicalhacker.philhackernews.data.remote;
 
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface HackerNewsRestAdapter {
     List<Integer> getTopStories();
 
     @GET("/item/{id}.json")
-    Story getStory(@Path("id") int id);
+    Item getStory(@Path("id") int id);
 }

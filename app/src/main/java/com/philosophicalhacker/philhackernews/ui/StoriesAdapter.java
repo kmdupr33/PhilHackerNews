@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
@@ -21,9 +21,9 @@ import butterknife.ButterKnife;
  * Created by MattDupree on 7/19/15.
  */
 class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-    private final List<Story> mStories;
+    private final List<Item> mStories;
 
-    public StoriesAdapter(List<Story> stories) {
+    public StoriesAdapter(List<Item> stories) {
         mStories = stories;
     }
 
@@ -37,22 +37,22 @@ class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder
 
     @Override
     public void onBindViewHolder(StoryViewHolder holder, int position) {
-        final Story story = mStories.get(position);
+        final Item item = mStories.get(position);
         String scoreText;
-        int score = story.getScore();
+        int score = item.getScore();
         if (score > 999) {
             scoreText = "999+";
         } else {
             scoreText = String.valueOf(score);
         }
         holder.mUpvotesTextView.setText(scoreText);
-        holder.mStoryTitleTextView.setText(story.getTitle());
-        holder.mAuthorTextView.setText(story.getAuthor());
+        holder.mStoryTitleTextView.setText(item.getTitle());
+        holder.mAuthorTextView.setText(item.getAuthor());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                Intent startIntent = StoryDetailActivity.getStartIntent(context, story);
+                Intent startIntent = StoryDetailActivity.getStartIntent(context, item);
                 context.startActivity(startIntent);
             }
         });

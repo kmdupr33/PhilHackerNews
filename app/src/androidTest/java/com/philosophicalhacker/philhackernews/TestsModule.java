@@ -7,7 +7,7 @@ import android.support.test.espresso.core.deps.guava.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsDatabaseOpenHelper;
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
-import com.philosophicalhacker.philhackernews.model.Story;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -42,17 +42,17 @@ public class TestsModule {
             }
 
             @Override
-            public Story getStory(@Path("id") int id) {
-                Story story;
+            public Item getStory(@Path("id") int id) {
+                Item item;
                 if (id == 9897329) {
                     //Guarantee that this story will be at the top of the list.
-                    story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR, MainActivityTests.DUMMY_URL);
+                    item = new Item(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR, MainActivityTests.DUMMY_URL, null, new int[0]);
                 } else {
                         Random random = new Random();
                         int score = random.nextInt(999);
-                        story = new Story(id, score, "Dummy Story", "Who Cares?", "http://www.google.com");
+                        item = new Item(id, score, "Dummy Story", "Who Cares?", "http://www.google.com", null, new int[0]);
                 }
-                return story;
+                return item;
             }
         };
     }

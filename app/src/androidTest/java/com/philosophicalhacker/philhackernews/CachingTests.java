@@ -56,6 +56,7 @@ public class CachingTests extends InstrumentationTestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         toggleAirplaneMode();
+        //TODO Figure out how to isolate tests from one another. Currently, the next test seems to start before this method completes, causing a No Such Table exception.
         SQLiteDatabase.deleteDatabase(mHackerNewsDatabaseFile);
     }
 
