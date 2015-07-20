@@ -3,10 +3,10 @@
     package="com.philosophicalhacker.philhackernews" >
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -26,32 +26,41 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".data.sync.HackerNewsAuthenticatorService">
+        <service android:name=".data.sync.HackerNewsAuthenticatorService" >
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/hackernews_account_authenticator"/>
+                android:resource="@xml/hackernews_account_authenticator" />
         </service>
-
-        <service
-            android:name=".data.sync.HackerNewsSyncService">
+        <service android:name=".data.sync.HackerNewsSyncService" >
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                android:resource="@xml/phil_hacker_news_sync_adapter"/>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/phil_hacker_news_sync_adapter" />
         </service>
 
         <provider
             android:name=".data.cache.HackerNewsContentProvider"
             android:authorities="com.philosophicalhacker.philhackernews.provider"
-            android:syncable="true"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false"
+            android:syncable="true" >
         </provider>
+
+        <activity
+            android:name=".ui.StoryDetailActivity"
+            android:label="@string/title_activity_story_detail"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.philosophicalhacker.philhackernews.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

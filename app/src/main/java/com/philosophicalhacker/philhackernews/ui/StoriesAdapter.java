@@ -1,6 +1,7 @@
 package com.philosophicalhacker.philhackernews.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,14 @@ class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder
         holder.mUpvotesTextView.setText(scoreText);
         holder.mStoryTitleTextView.setText(story.getTitle());
         holder.mAuthorTextView.setText(story.getAuthor());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, StoryDetailActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

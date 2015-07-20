@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PhilHackerNews</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_view_comments">Comments</string>
     <string name="story_load_error">Unable to load stories. Weird.</string>
+    <string name="title_activity_story_detail">StoryDetail</string>
 </resources>
