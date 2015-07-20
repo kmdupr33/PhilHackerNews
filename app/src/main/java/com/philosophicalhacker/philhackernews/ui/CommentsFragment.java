@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.CommentRepository;
+import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public class CommentsFragment extends LoaderFragment {
     @Inject
     CommentRepository mCommentRepository;
 
+    @Inject
+    DataSynchronizer mDataSynchronizer;
+
     public static CommentsFragment newInstance(Item item) {
         CommentsFragment commentsFragment = new CommentsFragment();
         Bundle args = new Bundle();
@@ -50,9 +54,12 @@ public class CommentsFragment extends LoaderFragment {
         View rootView = inflater.inflate(R.layout.fragment_comments, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Item item = getArguments().getParcelable(ARGS_ITEM);
-        mCommentRepository.loadCommentsForStory(item).subscribe(mCommentsSubscriber);
+        if (savedInstanceState == null) {
+            Item item = getArguments().getParcelable(ARGS_ITEM);
+            mDataSynchronizer.requestCommentsSync(item);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mCommentRepository.loadCommentsForStory(item).subscribe(mCommentsSubscriber);
+        }
         return rootView;
     }
 
@@ -106,7 +113,7 @@ public class CommentsFragment extends LoaderFragment {
 
         @Override
         public int getItemCount() {
-            return 10;
+            return mItems.size();
         }
     }
 }

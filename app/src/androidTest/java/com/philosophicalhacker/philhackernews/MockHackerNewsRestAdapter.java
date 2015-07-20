@@ -30,15 +30,15 @@ class MockHackerNewsRestAdapter implements HackerNewsRestAdapter {
     }
 
     @Override
-    public Item getStory(@Path("id") int id) {
+    public Item getItem(@Path("id") int id) {
         Item item;
         if (id == 9897329) {
             //Guarantee that this story will be at the top of the list.
-            item = new Item(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR, MainActivityTests.DUMMY_URL, null, new int[0]);
+            item = new Item(id, Item.TYPE_STORY, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR, MainActivityTests.DUMMY_URL, null, new int[0], 0);
         } else {
             Random random = new Random();
             int score = random.nextInt(999);
-            item = new Item(id, score, "Dummy Story", "Who Cares?", "http://www.google.com", null, new int[0]);
+            item = new Item(id, Item.TYPE_STORY, score, "Dummy Story", "Who Cares?", "http://www.google.com", null, new int[0], 0);
         }
         return item;
     }

@@ -57,6 +57,11 @@ public class RemoteDataFetcher implements DataFetcher {
 
     @Override
     public Item getStory(int storyId) {
-        return mHackerNewsRestAdapter.getStory(storyId);
+        return mHackerNewsRestAdapter.getItem(storyId);
+    }
+
+    @Override
+    public Item getComment(int commentId) {
+        return mHackerNewsRestAdapter.getItem(commentId);
     }
 }

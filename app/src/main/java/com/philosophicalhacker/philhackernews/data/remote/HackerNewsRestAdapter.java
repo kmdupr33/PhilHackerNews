@@ -16,5 +16,5 @@ public interface HackerNewsRestAdapter {
     List<Integer> getTopStories();
 
     @GET("/item/{id}.json")
-    Item getStory(@Path("id") int id);
+    Item getItem(@Path("id") int id);
 }

@@ -18,4 +18,6 @@ public interface DataFetcher {
     List<Item> getTopStories();
 
     Item getStory(int storyId);
+
+    Item getComment(int commentId);
 }

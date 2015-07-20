@@ -2,16 +2,14 @@ package com.philosophicalhacker.philhackernews.data.sync;
 
 import android.accounts.Account;
 import android.content.ContentResolver;
-import android.content.SyncStatusObserver;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
+import com.philosophicalhacker.philhackernews.model.Item;
 
 import javax.inject.Inject;
-
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Makes requests to synchronize cached device data with remote api data.
@@ -36,11 +34,15 @@ public class DataSynchronizer {
      * and {@link ContentResolver#SYNC_OBSERVER_TYPE_SETTINGS}
      */
     public void requestTopStoriesSync() {
-        Bundle settingsBundle = new Bundle();
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_TOP_STORIES_LIMIT, 20);
+        Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
+        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_LIMIT, 20);
         Log.d(TAG, "Requesting data sync for account: " + mAccount);
+        ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
+    }
+
+    public void requestCommentsSync(Item item) {
+        Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
+        settingsBundle.putIntArray(HackerNewsSyncAdapter.EXTRA_COMMENTS, item.getComments());
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 
@@ -56,4 +58,14 @@ public class DataSynchronizer {
         return isSyncPending() || isSyncActive();
     }
 
+    //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
+    @NonNull
+    private Bundle makeExpenditedManualSyncSettingsBundle() {
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        return settingsBundle;
+    }
 }

@@ -24,8 +24,9 @@ import java.util.List;
  */
 public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    public static final String EXTRA_KEY_TOP_STORIES_LIMIT = "EXTRA_KEY_TOP_STORIES_LIMIT";
+    public static final String EXTRA_KEY_LIMIT = "EXTRA_KEY_LIMIT";
     private static final String TAG = HackerNewsSyncAdapter.class.getSimpleName();
+    public static String EXTRA_COMMENTS = "EXTRA_KEY_SYNC_TYPE";
     private final DataFetcher mRemoteDataFetcher;
     private final DataFetcher mCachedDataFetcher;
 
@@ -40,12 +41,12 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(TAG, "Performing data sync for account: " + account);
-        int limit = extras.getInt(EXTRA_KEY_TOP_STORIES_LIMIT, Integer.MAX_VALUE);
+        int limit = extras.getInt(EXTRA_KEY_LIMIT, Integer.MAX_VALUE);
         List<Item> topStories = mRemoteDataFetcher.getTopStories(limit);
         List<Item> cachedTopStories = mCachedDataFetcher.getTopStories();
         for (int i = 0; i < topStories.size(); i++) {
             Item item = topStories.get(i);
-            ContentValues contentValues = getContentValuesForStory(item);
+            ContentValues contentValues = getContentValuesForItem(item);
             /*
             Normally, I'd be tempted to pull this logic into an object that's more unit testable than
             this one, but because the HackerNews api is readonly, we know that there isn't going to
@@ -56,11 +57,22 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
             lead to too much overhead overall in the application anyway.
              */
             ContentResolver contentResolver = getContext().getContentResolver();
-            if (cachedTopStories.contains(item)) {
-                contentResolver.update(ContentUris.withAppendedId(HackerNewsData.Items.CONTENT_URI, item.getId()), contentValues, null, null);
-            } else {
-                contentResolver.insert(HackerNewsData.Items.CONTENT_URI, contentValues);
+            syncDatabaseWithContentValues(cachedTopStories, item, contentValues, contentResolver);
+        }
+        int[] intArray = extras.getIntArray(EXTRA_COMMENTS);
+        if (intArray != null) {
+            for (int i = 0, end = intArray.length; i < end; i++) {
+                int commentId = intArray[i];
+                Item item = mRemoteDataFetcher.getComment(commentId);
             }
+        }
+    }
+
+    private void syncDatabaseWithContentValues(List<Item> cachedTopStories, Item item, ContentValues contentValues, ContentResolver contentResolver) {
+        if (cachedTopStories.contains(item)) {
+            contentResolver.update(ContentUris.withAppendedId(HackerNewsData.Items.CONTENT_URI, item.getId()), contentValues, null, null);
+        } else {
+            contentResolver.insert(HackerNewsData.Items.CONTENT_URI, contentValues);
         }
     }
 
@@ -68,7 +80,7 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
     // Helpers
     //----------------------------------------------------------------------------------
     @NonNull
-    private ContentValues getContentValuesForStory(Item item) {
+    private ContentValues getContentValuesForItem(Item item) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(HackerNewsData.Items._ID, item.getId());
         contentValues.put(HackerNewsData.Items.TYPE, item.getType());
