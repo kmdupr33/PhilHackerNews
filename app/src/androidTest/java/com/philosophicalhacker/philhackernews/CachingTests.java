@@ -1,5 +1,6 @@
 package com.philosophicalhacker.philhackernews;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,10 +33,12 @@ public class CachingTests extends InstrumentationTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        DaggerModuleOverridingAndroidJUnitRunner instrumentation = (DaggerModuleOverridingAndroidJUnitRunner) getInstrumentation();
+        Instrumentation instrumentation = getInstrumentation();
         mDevice = UiDevice.getInstance(instrumentation);
+        Context applicationContext = getInstrumentation().getTargetContext().getApplicationContext();
         //noinspection ResourceType
-        ObjectGraph objectGraph = instrumentation.getApplication().getObjectGraph();
+        ObjectGraph objectGraph = (ObjectGraph) applicationContext.getSystemService(
+                PhilHackerNewsApplication.OBJECT_GRAPH);
         objectGraph.inject(this);
     }
 
