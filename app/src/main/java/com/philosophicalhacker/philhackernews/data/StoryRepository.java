@@ -4,15 +4,12 @@ import com.philosophicalhacker.philhackernews.model.Story;
 
 import java.util.List;
 
-import rx.Subscriber;
-import rx.Subscription;
+import rx.Observable;
 
 /**
  * Created by MattDupree on 7/16/15.
  */
 public interface StoryRepository {
 
-    Subscription addStoriesSubscriber(Subscriber<List<Story>> storiesSubscriber);
-
-    void loadTopStories();
+    Observable<List<Story>> getTopStoriesObservable(int page, int count);
 }

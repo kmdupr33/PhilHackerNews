@@ -1,12 +1,8 @@
 package com.philosophicalhacker.philhackernews.daggermodules;
 
-import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.DataConverter;
-import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
-import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
+import com.philosophicalhacker.philhackernews.data.CacheFirstStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.model.Story;
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
@@ -15,7 +11,6 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
-import rx.Observable;
 import rx.observables.ConnectableObservable;
 
 /**
@@ -25,8 +20,6 @@ import rx.observables.ConnectableObservable;
  */
 @Module(injects = MainActivityFragment.class, addsTo = PhilHackerNewsAppModule.class, complete = false)
 public class LoaderModule {
-
-    private static final int API_STORY_LOADER = 0;
     private LoaderManager mLoaderManager;
 
     public LoaderModule(LoaderManager loaderManager) {
@@ -39,16 +32,8 @@ public class LoaderModule {
     }
 
     @Provides
-    ConnectableObservable<List<Story>> provideApiStoriesObservable(LoaderManager loaderManager,
-                                                                   CursorLoader storyLoader,
-                                                                     DataConverter<List<Story>, Cursor> cursorDataConverter) {
-        return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter)).publish();
-    }
-
-
-    @Provides
     StoryRepository provideStoryRepository(ConnectableObservable<List<Story>> apiStoriesObservable) {
-        return new MultiCastingStoryRepository(apiStoriesObservable);
+        return new CacheFirstStoryRepository(apiStoriesObservable);
     }
 
 }
