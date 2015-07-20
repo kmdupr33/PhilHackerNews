@@ -39,6 +39,7 @@ public class MainActivityTests {
 
     public static final String DUMMY_STORY_TITLE = "Why Hacker News is Awesomer than your News";
     public static final String DUMMY_STORY_AUTHOR = "PhilosophicalHacker";
+    public static final String DUMMY_URL = "http://www.philosophicalhacker.com";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);

@@ -46,11 +46,11 @@ public class TestsModule {
                 Story story;
                 if (id == 9897329) {
                     //Guarantee that this story will be at the top of the list.
-                    story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR);
+                    story = new Story(id, 10000, MainActivityTests.DUMMY_STORY_TITLE, MainActivityTests.DUMMY_STORY_AUTHOR, MainActivityTests.DUMMY_URL);
                 } else {
                         Random random = new Random();
                         int score = random.nextInt(999);
-                        story = new Story(id, score, "Dummy Story", "Who Cares?");
+                        story = new Story(id, score, "Dummy Story", "Who Cares?", "http://www.google.com");
                 }
                 return story;
             }
