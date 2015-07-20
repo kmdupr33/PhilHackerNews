@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.CursorToStoryConverter;
+import com.philosophicalhacker.philhackernews.data.CursorToItemConverter;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
 import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
@@ -70,7 +70,7 @@ public class DataModule {
 
     @Provides
     DataConverter<List<Item>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
-        return new CursorToStoryConverter();
+        return new CursorToItemConverter();
     }
 
     @Singleton

@@ -71,6 +71,7 @@ public class HackerNewsSyncAdapter extends AbstractThreadedSyncAdapter {
     private ContentValues getContentValuesForStory(Item item) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(HackerNewsData.Items._ID, item.getId());
+        contentValues.put(HackerNewsData.Items.TYPE, item.getType());
         contentValues.put(HackerNewsData.Items.SCORE, item.getScore());
         contentValues.put(HackerNewsData.Items.TITLE, item.getTitle());
         contentValues.put(HackerNewsData.Items.AUTHOR, item.getAuthor());

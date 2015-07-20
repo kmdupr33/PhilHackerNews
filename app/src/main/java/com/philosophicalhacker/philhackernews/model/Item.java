@@ -2,8 +2,12 @@ package com.philosophicalhacker.philhackernews.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.StringDef;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  *
@@ -11,6 +15,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Item implements Parcelable {
     private int id;
+    private String type;
     private int score;
     private String title;
     @SerializedName("by")
@@ -20,8 +25,15 @@ public class Item implements Parcelable {
     @SerializedName("kids")
     private int[] comments;
 
-    public Item(int id, int score, String title, String author, String url, String text, int[] commentIds) {
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({TYPE_STORY, TYPE_COMMENT})
+    public @interface ItemType {}
+    public static final String TYPE_STORY = "story";
+    public static final String TYPE_COMMENT = "comment";
+
+    public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds) {
         this.id = id;
+        this.type = type;
         this.score = score;
         this.title = title;
         this.author = author;
@@ -32,6 +44,7 @@ public class Item implements Parcelable {
 
     protected Item(Parcel in) {
         id = in.readInt();
+        type = in.readString();
         score = in.readInt();
         title = in.readString();
         author = in.readString();
@@ -43,6 +56,7 @@ public class Item implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
+        dest.writeString(type);
         dest.writeInt(score);
         dest.writeString(title);
         dest.writeString(author);
@@ -67,6 +81,10 @@ public class Item implements Parcelable {
             return new Item[size];
         }
     };
+
+    public String getType() {
+        return type;
+    }
 
     public int getId() {
         return id;

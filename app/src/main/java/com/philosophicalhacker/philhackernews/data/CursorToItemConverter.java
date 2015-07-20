@@ -12,15 +12,16 @@ import java.util.List;
  *
  * Created by MattDupree on 7/18/15.
  */
-public class CursorToStoryConverter implements DataConverter<List<Item>, Cursor> {
+public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> {
 
     private static final int ID_COL_POS = 0;
-    public static final int SCORE_COL_POS = 1;
-    public static final int TITLE_COL_POS = 2;
-    public static final int AUTHOR_COL_POS = 3;
-    private static final int URL_POS = 4;
-    private static final int TEXT_POS = 5;
-    private static final int COMMENTS_POS = 6;
+    public static final int TYPE_COL_POS = 1;
+    public static final int SCORE_COL_POS = 2;
+    public static final int TITLE_COL_POS = 3;
+    public static final int AUTHOR_COL_POS = 4;
+    private static final int URL_POS = 5;
+    private static final int TEXT_POS = 6;
+    private static final int COMMENTS_POS = 7;
 
     @Override
     public List<Item> convertData(Cursor data) {
@@ -29,6 +30,7 @@ public class CursorToStoryConverter implements DataConverter<List<Item>, Cursor>
         data.moveToPosition(-1);
         while (data.moveToNext()) {
             int id = data.getInt(ID_COL_POS);
+            String type = data.getString(TYPE_COL_POS);
             int score = data.getInt(SCORE_COL_POS);
             String title = data.getString(TITLE_COL_POS);
             String author = data.getString(AUTHOR_COL_POS);
@@ -42,7 +44,8 @@ public class CursorToStoryConverter implements DataConverter<List<Item>, Cursor>
                     commentIds[i] = Integer.parseInt(commentIdStrings[i]);
                 }
             }
-            itemIds.add(new Item(id, score, title, author, url, text, commentIds));
+            //noinspection ResourceType - type received from database, so we assume valid value
+            itemIds.add(new Item(id, type, score, title, author, url, text, commentIds));
         }
         return itemIds;
     }

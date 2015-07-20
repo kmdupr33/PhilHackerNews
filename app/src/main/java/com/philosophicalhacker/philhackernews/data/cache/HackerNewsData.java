@@ -19,5 +19,6 @@ public interface HackerNewsData {
         String URL = "url";
         String COMMENTS = "comments";
         String TEXT = "text";
+        String TYPE = "type";
     }
 }

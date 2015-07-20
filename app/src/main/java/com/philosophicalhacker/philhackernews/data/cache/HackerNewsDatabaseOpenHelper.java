@@ -17,6 +17,7 @@ public class HackerNewsDatabaseOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + HackerNewsData.Items.TABLE_NAME
                 + "(" + HackerNewsData.Items._ID + " INTEGER PRIMARY KEY, "
+                + HackerNewsData.Items.TYPE + " TEXT, "
                 + HackerNewsData.Items.SCORE + " INTEGER, "
                 + HackerNewsData.Items.TITLE + " TEXT, "
                 + HackerNewsData.Items.AUTHOR + " TEXT, "
