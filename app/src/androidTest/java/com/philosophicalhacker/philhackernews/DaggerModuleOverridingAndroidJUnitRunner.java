@@ -17,8 +17,4 @@ public class DaggerModuleOverridingAndroidJUnitRunner extends AndroidJUnitRunner
         mApplication = super.newApplication(cl, testApplicationClassName, context);
         return mApplication;
     }
-
-    public TestApplication getApplication() {
-        return (TestApplication) mApplication;
-    }
 }
