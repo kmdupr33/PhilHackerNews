@@ -1,13 +1,18 @@
-<WebView
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.philosophicalhacker.philhackernews.ui.StoryDetailActivityFragment"
+    android:id="@+id/swipeToRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:id="@+id/webView"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"/>
+    android:layout_height="match_parent">
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:id="@+id/webView"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+</android.support.v4.widget.SwipeRefreshLayout>

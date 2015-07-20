@@ -1,13 +1,16 @@
 package com.philosophicalhacker.philhackernews.ui;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Story;
@@ -34,6 +37,9 @@ public class StoryDetailActivityFragment extends Fragment {
     @Bind(R.id.webView)
     WebView mWebView;
 
+    @Bind(R.id.swipeToRefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,8 +47,12 @@ public class StoryDetailActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_story_detail, container, false);
         ButterKnife.bind(this, view);
         Story story = getArguments().getParcelable(ARGS_STORY);
-        getActivity().setTitle(story.getTitle());
-        mWebView.loadUrl(story.getUrl());
+        if (savedInstanceState == null) {
+            getActivity().setTitle(story.getTitle());
+            mWebView.setWebViewClient(new SwipeToRefreshUpdatingWebViewClient(mSwipeRefreshLayout));
+            mSwipeRefreshLayout.setOnRefreshListener(new WebViewReloadingOnRefreshListener(mWebView));
+            mWebView.loadUrl(story.getUrl());
+        }
         return view;
     }
 
@@ -58,4 +68,42 @@ public class StoryDetailActivityFragment extends Fragment {
         inflater.inflate(R.menu.menu_story_detail, menu);
     }
 
+    //----------------------------------------------------------------------------------
+    // Nested Inner Class
+    //----------------------------------------------------------------------------------
+    private static class SwipeToRefreshUpdatingWebViewClient extends WebViewClient {
+        private SwipeRefreshLayout mSwipeRefreshLayout;
+
+        public SwipeToRefreshUpdatingWebViewClient(SwipeRefreshLayout swipeRefreshLayout) {
+            mSwipeRefreshLayout = swipeRefreshLayout;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
+
+    private static class WebViewReloadingOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+
+        private WebView mWebView;
+
+        public WebViewReloadingOnRefreshListener(WebView webView) {
+            mWebView = webView;
+        }
+
+        @Override
+        public void onRefresh() {
+            mWebView.reload();
+        }
+    }
 }
