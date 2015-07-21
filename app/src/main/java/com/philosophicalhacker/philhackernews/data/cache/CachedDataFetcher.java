@@ -1,7 +1,9 @@
 package com.philosophicalhacker.philhackernews.data.cache;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.net.Uri;
 
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
@@ -18,17 +20,17 @@ public class CachedDataFetcher implements DataFetcher {
 
     public static final String DAGGER_INJECT_QUALIFIER = "cache";
     private ContentResolver mContentResolver;
-    private DataConverter<List<Item>, Cursor> mCursorToStoryIdsConverter;
+    private DataConverter<List<Item>, Cursor> mCursorToItemConverter;
 
-    public CachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> cursorToStoryIdsConverter) {
+    public CachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> cursorToItemConverter) {
         mContentResolver = contentResolver;
-        mCursorToStoryIdsConverter = cursorToStoryIdsConverter;
+        mCursorToItemConverter = cursorToItemConverter;
     }
 
     @Override
     public List<Item> getTopStories(int limit) {
         Cursor cursor = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null, null, null, HackerNewsData.Items.SCORE + " DESC");
-        return mCursorToStoryIdsConverter.convertData(cursor);
+        return mCursorToItemConverter.convertData(cursor);
     }
 
     @Override
@@ -38,6 +40,30 @@ public class CachedDataFetcher implements DataFetcher {
 
     @Override
     public Item getStory(int storyId) {
-        return null;
+        return getItem(storyId);
+    }
+
+    @Override
+    public Item getComment(int commentId) {
+        return getItem(commentId);
+    }
+
+    @Override
+    public List<Item> getCommentsForStory(Item story, int limit) {
+        Cursor cursor = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null,
+                HackerNewsData.Items.Selection.COMMENTS_FOR_STORY,
+                HackerNewsData.Items.Selection.getCommentsForStoryArgs(story.getId()), null);
+        return mCursorToItemConverter.convertData(cursor);
+    }
+
+    @Override
+    public List<Item> getCommentsForStory(Item story) {
+        return getCommentsForStory(story, Integer.MAX_VALUE);
+    }
+
+    private Item getItem(long itemId) {
+        Uri uri = ContentUris.withAppendedId(HackerNewsData.Items.CONTENT_URI, itemId);
+        Cursor query = mContentResolver.query(uri, null, null, null, null);
+        return mCursorToItemConverter.convertData(query).get(0);
     }
 }

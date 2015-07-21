@@ -33,10 +33,10 @@ public class CacheOnlyCommentRepository implements CommentRepository {
     }
 
     @Override
-    public Observable<List<Item>> loadCommentsForStory(Item item) {
+    public Observable<List<Item>> getCommentsForStoryObservable(Item item) {
         CursorLoader cursorLoader = new CursorLoader(mContext, HackerNewsData.Items.CONTENT_URI, null,
-                HackerNewsData.Items.TYPE + "= ? AND " + HackerNewsData.Items.PARENT + " = ?",
-                new String[] {Item.TYPE_COMMENT, String.valueOf(item.getId())},
+                HackerNewsData.Items.Selection.COMMENTS_FOR_STORY,
+                HackerNewsData.Items.Selection.getCommentsForStoryArgs(item.getId()),
                 SCORE_DESC_SORT_ORDER);
         return Observable.create(new LoaderInitializingOnSubscribe<>(COMMENT_LOADER, mLoaderManager, cursorLoader, mDataConverter));
     }

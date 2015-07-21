@@ -8,9 +8,11 @@ import android.support.v4.content.CursorLoader;
 import com.philosophicalhacker.philhackernews.data.CacheOnlyCommentRepository;
 import com.philosophicalhacker.philhackernews.data.CommentRepository;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
+import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.model.Item;
 import com.philosophicalhacker.philhackernews.ui.CommentsFragment;
 import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
@@ -45,6 +47,12 @@ public class LoaderModule {
     @Provides
     LoaderManager provideLoaderManager() {
         return mLoaderManager;
+    }
+
+    @Provides
+    CursorLoader provideStoryLoader(Context context) {
+        return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null,
+                HackerNewsData.Items.TYPE + "= ?", new String[] {Item.TYPE_STORY}, ItemRepository.SCORE_DESC_SORT_ORDER);
     }
 
     @Provides

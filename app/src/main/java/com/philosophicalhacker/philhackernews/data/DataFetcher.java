@@ -20,4 +20,8 @@ public interface DataFetcher {
     Item getStory(int storyId);
 
     Item getComment(int commentId);
+
+    List<Item> getCommentsForStory(Item story, int limit);
+
+    List<Item> getCommentsForStory(Item story);
 }

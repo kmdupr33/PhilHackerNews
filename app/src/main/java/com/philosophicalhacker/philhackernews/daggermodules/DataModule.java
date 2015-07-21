@@ -4,15 +4,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.content.CursorLoader;
 
 import com.philosophicalhacker.philhackernews.data.CursorToItemConverter;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
-import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsCache;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsContentProvider;
-import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsDatabaseOpenHelper;
 import com.philosophicalhacker.philhackernews.data.remote.HackerNewsRestAdapter;
 import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
@@ -45,6 +43,13 @@ public class DataModule {
         return context.getContentResolver();
     }
 
+    @Singleton
+    @Provides
+    HackerNewsCache provideHackerNewsCache(ContentResolver contentResolver) {
+        return new HackerNewsCache(contentResolver);
+    }
+
+    @Singleton
     @Provides
     HackerNewsRestAdapter privideHackerNewsRestAdapter() {
         RestAdapter build = new RestAdapter.Builder()
@@ -62,12 +67,6 @@ public class DataModule {
     @Provides @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
     DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> dataConverter) {
         return new CachedDataFetcher(contentResolver, dataConverter);
-    }
-
-    @Provides
-    CursorLoader provideStoryLoader(Context context) {
-        return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null,
-                HackerNewsData.Items.TYPE + "= ?", new String[] {Item.TYPE_STORY}, ItemRepository.SCORE_DESC_SORT_ORDER);
     }
 
     @Singleton

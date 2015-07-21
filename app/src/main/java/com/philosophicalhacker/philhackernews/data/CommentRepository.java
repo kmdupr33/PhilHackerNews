@@ -10,5 +10,5 @@ import rx.Observable;
  * Created by MattDupree on 7/20/15.
  */
 public interface CommentRepository extends ItemRepository {
-    Observable<List<Item>> loadCommentsForStory(Item item);
+    Observable<List<Item>> getCommentsForStoryObservable(Item item);
 }

@@ -6,10 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.philosophicalhacker.philhackernews.data.DataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.CachedDataFetcher;
+import com.philosophicalhacker.philhackernews.data.cache.HackerNewsCache;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
+import com.philosophicalhacker.philhackernews.data.remote.RemoteDataFetcher;
 import com.philosophicalhacker.philhackernews.model.Item;
 
+import java.util.List;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Makes requests to synchronize cached device data with remote api data.
@@ -21,18 +28,24 @@ public class DataSynchronizer {
     private static final String TAG = DataSynchronizer.class.getSimpleName();
 
     private Account mAccount;
+    private HackerNewsCache mHackerNewsCache;
+    private final DataFetcher mRemoteDataFetcher;
+    private final DataFetcher mCachedDataFetcher;
 
     @Inject
-    public DataSynchronizer(Account account) {
+    public DataSynchronizer(Account account,
+                            HackerNewsCache hackerNewsCache,
+                            @Named(RemoteDataFetcher.DAGGER_INJECT_QUALIFIER) DataFetcher remoteDataFetcher,
+                            @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER) DataFetcher cachedDataFetcher) {
         mAccount = account;
+        mHackerNewsCache = hackerNewsCache;
+        mRemoteDataFetcher = remoteDataFetcher;
+        mCachedDataFetcher = cachedDataFetcher;
     }
 
-    /**
-     *
-     * @return an observable that reports changes in the sync request status. Possible emited values are
-     * {@link ContentResolver#SYNC_OBSERVER_TYPE_ACTIVE}, {@link ContentResolver#SYNC_OBSERVER_TYPE_PENDING},
-     * and {@link ContentResolver#SYNC_OBSERVER_TYPE_SETTINGS}
-     */
+    //----------------------------------------------------------------------------------
+    // Public Methods
+    //----------------------------------------------------------------------------------
     public void requestTopStoriesSync() {
         Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
         settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_LIMIT, 20);
@@ -40,9 +53,10 @@ public class DataSynchronizer {
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 
-    public void requestCommentsSync(Item item) {
+    public void requestCommentsSync(Item item, int limit) {
         Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
-        settingsBundle.putIntArray(HackerNewsSyncAdapter.EXTRA_COMMENTS, item.getComments());
+        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_STORY, item.getId());
+        settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_LIMIT, limit);
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 
@@ -59,6 +73,29 @@ public class DataSynchronizer {
     }
 
     //----------------------------------------------------------------------------------
+    // Package Private - Called by HackerNewsSyncAdapter
+    //----------------------------------------------------------------------------------
+    void onSyncComments(int limit, int storyId) {
+        /*
+        Unfortuantely, because of the way SyncAdapters work, we couldn't pass a story into this method.
+        So, we have to get the story from the cache. Right now, the cache fetcher only hits the database
+        for cached data.
+
+        TODO Consider using an LruCache to improve performance here.
+         */
+        Item story = mCachedDataFetcher.getStory(storyId);
+        List<Item> commentsForStory = mRemoteDataFetcher.getCommentsForStory(story, limit);
+        List<Item> cachedComments = mCachedDataFetcher.getCommentsForStory(story);
+        syncDatabaseWithRemoteItems(cachedComments, commentsForStory, mHackerNewsCache);
+    }
+
+    void onSyncStories(int limit) {
+        List<Item> topStories = mRemoteDataFetcher.getTopStories(limit);
+        List<Item> cachedTopStories = mCachedDataFetcher.getTopStories();
+        syncDatabaseWithRemoteItems(cachedTopStories, topStories, mHackerNewsCache);
+    }
+
+    //----------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------
     @NonNull
@@ -67,5 +104,17 @@ public class DataSynchronizer {
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         return settingsBundle;
+    }
+
+    private void syncDatabaseWithRemoteItems(List<Item> cachedItems, List<Item> remoteItems,
+                                             HackerNewsCache hackerNewsCache) {
+        for (int i = 0; i < remoteItems.size(); i++) {
+            Item item = remoteItems.get(i);
+            if (cachedItems.contains(item)) {
+                hackerNewsCache.updateItem(item);
+            } else {
+                hackerNewsCache.insertItem(item);
+            }
+        }
     }
 }

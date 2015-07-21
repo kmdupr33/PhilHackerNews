@@ -56,9 +56,9 @@ public class CommentsFragment extends LoaderFragment {
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
             Item item = getArguments().getParcelable(ARGS_ITEM);
-            mDataSynchronizer.requestCommentsSync(item);
+            mDataSynchronizer.requestCommentsSync(item, 20);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mCommentRepository.loadCommentsForStory(item).subscribe(mCommentsSubscriber);
+            mCommentRepository.getCommentsForStoryObservable(item).subscribe(mCommentsSubscriber);
         }
         return rootView;
     }
