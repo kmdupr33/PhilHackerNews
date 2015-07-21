@@ -25,6 +25,10 @@ public interface HackerNewsData {
         String PARENT = "parent";
 
         class Selection {
+            public static final String ITEM_ID = Items._ID + " = ?";
+            public static String[] getItemWithIdArgs(long itemId) {
+                return new String[]{String.valueOf(itemId)};
+            }
             public static String COMMENTS_FOR_STORY = HackerNewsData.Items.TYPE + " = ? AND " + HackerNewsData.Items.PARENT + " = ? ";
 
             public static String[] getCommentsForStoryArgs(int storyId) {

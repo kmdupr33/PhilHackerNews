@@ -87,12 +87,14 @@ public class DataSynchronizer {
         List<Item> commentsForStory = mRemoteDataFetcher.getCommentsForStory(story, limit);
         List<Item> cachedComments = mCachedDataFetcher.getCommentsForStory(story);
         syncDatabaseWithRemoteItems(cachedComments, commentsForStory, mHackerNewsCache);
+        mHackerNewsCache.notifyCacheUpdated();
     }
 
     void onSyncStories(int limit) {
         List<Item> topStories = mRemoteDataFetcher.getTopStories(limit);
         List<Item> cachedTopStories = mCachedDataFetcher.getTopStories();
         syncDatabaseWithRemoteItems(cachedTopStories, topStories, mHackerNewsCache);
+        mHackerNewsCache.notifyCacheUpdated();
     }
 
     //----------------------------------------------------------------------------------

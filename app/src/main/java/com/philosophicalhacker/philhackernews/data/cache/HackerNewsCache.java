@@ -57,4 +57,8 @@ public class HackerNewsCache {
         contentValues.put(HackerNewsData.Items.COMMENTS, stringBuilder.toString());
         return contentValues;
     }
+
+    public void notifyCacheUpdated() {
+        mContentResolver.notifyChange(HackerNewsData.Items.CONTENT_URI, null);
+    }
 }

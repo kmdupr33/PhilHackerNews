@@ -1,9 +1,7 @@
 package com.philosophicalhacker.philhackernews.data.cache;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.DataFetcher;
@@ -62,8 +60,9 @@ public class CachedDataFetcher implements DataFetcher {
     }
 
     private Item getItem(long itemId) {
-        Uri uri = ContentUris.withAppendedId(HackerNewsData.Items.CONTENT_URI, itemId);
-        Cursor query = mContentResolver.query(uri, null, null, null, null);
+        Cursor query = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null,
+                HackerNewsData.Items.Selection.ITEM_ID,
+                HackerNewsData.Items.Selection.getItemWithIdArgs(itemId), null);
         return mCursorToItemConverter.convertData(query).get(0);
     }
 }

@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
 
@@ -53,8 +52,7 @@ public class HackerNewsContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        insertWithoutNotifyingChange(uri, values);
-        getContext().getContentResolver().notifyChange(uri, null);
+        mHackerNewsDatabase.insert(HackerNewsData.Items.TABLE_NAME, null, values);
         return uri;
     }
 
@@ -65,25 +63,6 @@ public class HackerNewsContentProvider extends ContentProvider {
                                                                               values,
                                                                               HackerNewsData.Items._ID + " = ?",
                                                                               new String[]{uri.getLastPathSegment()});
-        getContext().getContentResolver().notifyChange(uri, null);
         return numRowsAffected;
-    }
-
-    @Override
-    public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
-        int numValues = values.length;
-        for (int i = 0; i < numValues; i++) {
-            insertWithoutNotifyingChange(uri, values[i]);
-        }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return numValues;
-    }
-
-    //----------------------------------------------------------------------------------
-    // Helpers
-    //----------------------------------------------------------------------------------
-    private Uri insertWithoutNotifyingChange(Uri uri, ContentValues contentValues) {
-        mHackerNewsDatabase.insert(HackerNewsData.Items.TABLE_NAME, null, contentValues);
-        return uri;
     }
 }
