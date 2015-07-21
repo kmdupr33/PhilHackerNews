@@ -61,6 +61,7 @@ public class CommentsFragment extends LoaderFragment {
             mDataSynchronizer.requestCommentsSync(item, 20);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             RefreshableListSubscriber subscriber = new CommentsRefreshableListSubscriber(mSwipeRefreshLayout, mRecyclerView);
+            mSwipeRefreshLayout.setOnRefreshListener(new CommentSyncRequestingRefreshListener(item, mDataSynchronizer));
             mCommentRepository.getCommentsForStoryObservable(item).subscribe(subscriber);
         }
         return rootView;
@@ -84,6 +85,21 @@ public class CommentsFragment extends LoaderFragment {
         @Override
         protected RecyclerView.Adapter getItemAdapter(List<Item> items) {
             return new CommentsAdapter(items);
+        }
+    }
+
+    private static class CommentSyncRequestingRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+        private DataSynchronizer mDataSynchronizer;
+        private Item mItem;
+
+        public CommentSyncRequestingRefreshListener(Item item, DataSynchronizer dataSynchronizer) {
+            mItem = item;
+            mDataSynchronizer = dataSynchronizer;
+        }
+
+        @Override
+        public void onRefresh() {
+            mDataSynchronizer.requestCommentsSync(mItem, 20);
         }
     }
 }
