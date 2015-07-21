@@ -5,14 +5,14 @@ import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 
-import com.philosophicalhacker.philhackernews.data.CacheOnlyCommentRepository;
-import com.philosophicalhacker.philhackernews.data.CommentRepository;
 import com.philosophicalhacker.philhackernews.data.DataConverter;
 import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
-import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
-import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
+import com.philosophicalhacker.philhackernews.data.repository.CacheOnlyCommentRepository;
+import com.philosophicalhacker.philhackernews.data.repository.CacheOnlyStoryRepository;
+import com.philosophicalhacker.philhackernews.data.repository.CommentRepository;
+import com.philosophicalhacker.philhackernews.data.repository.StoryRepository;
 import com.philosophicalhacker.philhackernews.model.Item;
 import com.philosophicalhacker.philhackernews.ui.commentslist.CommentsFragment;
 import com.philosophicalhacker.philhackernews.ui.storieslist.StoriesFragment;
@@ -23,7 +23,6 @@ import dagger.Module;
 import dagger.Provides;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.ConnectableObservable;
 
 /**
  * Provides dependencies required for Loading HackerNews Data
@@ -34,13 +33,13 @@ import rx.observables.ConnectableObservable;
         CommentsFragment.class},
         addsTo = PhilHackerNewsAppModule.class,
         complete = false)
-public class LoaderModule {
+public class RepositoryModule {
 
     private static final int API_STORY_LOADER = 0;
 
     private LoaderManager mLoaderManager;
 
-    public LoaderModule(LoaderManager loaderManager) {
+    public RepositoryModule(LoaderManager loaderManager) {
         mLoaderManager = loaderManager;
     }
 
@@ -56,18 +55,17 @@ public class LoaderModule {
     }
 
     @Provides
-    ConnectableObservable<List<Item>> provideApiStoriesObservable(LoaderManager loaderManager,
+    Observable<List<Item>> provideApiStoriesObservable(LoaderManager loaderManager,
                                                                    CursorLoader storyLoader,
                                                                      DataConverter<List<Item>, Cursor> cursorDataConverter) {
         return Observable.create(new LoaderInitializingOnSubscribe<>(API_STORY_LOADER, loaderManager, storyLoader, cursorDataConverter))
-                .observeOn(AndroidSchedulers.mainThread())
-                .publish();
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
     @Provides
-    StoryRepository provideStoryRepository(ConnectableObservable<List<Item>> apiStoriesObservable) {
-        return new MultiCastingStoryRepository(apiStoriesObservable);
+    StoryRepository provideStoryRepository(Observable<List<Item>> apiStoriesObservable) {
+        return new CacheOnlyStoryRepository(apiStoriesObservable);
     }
 
     @Provides

@@ -1,4 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout
+<com.philosophicalhacker.philhackernews.ui.refresh.CustomChildSwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipeToRefresh"
     android:layout_height="match_parent"
@@ -10,4 +10,4 @@
           tools:layout="@layout/fragment_story_detail"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>
-</android.support.v4.widget.SwipeRefreshLayout>
+</com.philosophicalhacker.philhackernews.ui.refresh.CustomChildSwipeRefreshLayout>
