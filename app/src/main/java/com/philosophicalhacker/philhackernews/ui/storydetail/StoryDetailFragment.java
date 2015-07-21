@@ -19,7 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Shows a webview that points to the link within the HackerNews story.
+ * Shows a webview that points to a link or the html text within the HackerNews story.
  */
 public class StoryDetailFragment extends Fragment {
 
