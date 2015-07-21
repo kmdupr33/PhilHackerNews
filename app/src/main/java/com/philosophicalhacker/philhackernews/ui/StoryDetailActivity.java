@@ -56,11 +56,6 @@ public class StoryDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean storyFragmentIsShowing() {
-        return getSupportFragmentManager().findFragmentByTag(STORY_FRAG_TAG) != null;
-    }
-
-
     public Fragment getCommentsFragment(Item item) {
         if (mCommentsFragment == null) {
             mCommentsFragment = CommentsFragment.newInstance(item);
