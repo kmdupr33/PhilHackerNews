@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.CommentRepository;
@@ -89,31 +88,4 @@ public class CommentsFragment extends LoaderFragment {
         }
     };
 
-    //----------------------------------------------------------------------------------
-    // Nested Inner Class
-    //----------------------------------------------------------------------------------
-    private static class CommentsAdapter extends RecyclerView.Adapter {
-        private List<Item> mItems;
-
-        public CommentsAdapter(List<Item> items) {
-            mItems = items;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RecyclerView.ViewHolder(new TextView(parent.getContext())) {
-            };
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            Item item = mItems.get(position);
-            ((TextView) holder.itemView).setText(item.getText());
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItems.size();
-        }
-    }
 }

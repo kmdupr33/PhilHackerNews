@@ -2,52 +2,35 @@ package com.philosophicalhacker.philhackernews.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  *
  * Created by MattDupree on 7/19/15.
  */
-class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-    private final List<Item> mStories;
+class StoriesAdapter extends ItemAdapter {
 
     public StoriesAdapter(List<Item> stories) {
-        mStories = stories;
+        super(stories);
     }
 
     @Override
-    public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.story_list_item, parent, false);
-        return new StoryViewHolder(itemView);
+    protected View getItemView(LayoutInflater inflater, ViewGroup parent) {
+        return inflater.inflate(R.layout.story_list_item, parent, false);
     }
 
     @Override
-    public void onBindViewHolder(StoryViewHolder holder, int position) {
-        final Item item = mStories.get(position);
-        String scoreText;
-        int score = item.getScore();
-        if (score > 999) {
-            scoreText = "999+";
-        } else {
-            scoreText = String.valueOf(score);
-        }
-        holder.mUpvotesTextView.setText(scoreText);
-        holder.mStoryTitleTextView.setText(item.getTitle());
-        holder.mAuthorTextView.setText(item.getAuthor());
+    public void onBindViewHolder(HackerNewsItemViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        final Item item = mItems.get(position);
+        holder.mItemTextView.setText(item.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,27 +39,5 @@ class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder
                 context.startActivity(startIntent);
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return mStories.size();
-    }
-
-    static class StoryViewHolder extends RecyclerView.ViewHolder {
-
-        @Bind(R.id.upvotesTextView)
-        TextView mUpvotesTextView;
-
-        @Bind(R.id.storyTitleTextView)
-        TextView mStoryTitleTextView;
-
-        @Bind(R.id.authorTextView)
-        TextView mAuthorTextView;
-
-        public StoryViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 }
