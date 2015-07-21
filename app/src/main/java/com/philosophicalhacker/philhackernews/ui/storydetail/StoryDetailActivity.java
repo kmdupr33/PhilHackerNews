@@ -88,7 +88,7 @@ public class StoryDetailActivity extends AppCompatActivity {
 
     private Fragment getStoryDetailFragment(Item item) {
         if (mStoryDetailFragment == null) {
-            mStoryDetailFragment = StoryDetailFragment.newInstance(mStoryItem);
+            mStoryDetailFragment = StoryDetailFragment.newInstance(item);
         }
         return mStoryDetailFragment;
     }
