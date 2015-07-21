@@ -28,6 +28,8 @@ import retrofit.RestAdapter;
 
 /**
  *
+ * Provides dependencies for all objects in the data module.
+ *
  * Created by MattDupree on 7/19/15.
  */
 @Module(library = true,
@@ -37,6 +39,9 @@ import retrofit.RestAdapter;
             },
         complete = false)
 public class DataModule {
+
+    public static final String HACKERNEWSDATA_DB_FILE_NAME = "hackernewsdata.db";
+    public static final String HACKER_NEWS_API_ENDPOINT = "https://hacker-news.firebaseio.com/v0";
 
     @Provides
     ContentResolver provideContentResolver(Context context) {
@@ -53,17 +58,19 @@ public class DataModule {
     @Provides
     HackerNewsRestAdapter privideHackerNewsRestAdapter() {
         RestAdapter build = new RestAdapter.Builder()
-                .setEndpoint("https://hacker-news.firebaseio.com/v0")
+                .setEndpoint(HACKER_NEWS_API_ENDPOINT)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         return build.create(HackerNewsRestAdapter.class);
     }
 
+    @Singleton
     @Provides @Named(RemoteDataFetcher.DAGGER_INJECT_QUALIFIER)
     DataFetcher provideRemoteDataFetcher(HackerNewsRestAdapter hackerNewsRestAdapter) {
         return new RemoteDataFetcher(hackerNewsRestAdapter);
     }
 
+    @Singleton
     @Provides @Named(CachedDataFetcher.DAGGER_INJECT_QUALIFIER)
     DataFetcher provideCachedDataFetcher(ContentResolver contentResolver, DataConverter<List<Item>, Cursor> dataConverter) {
         return new CachedDataFetcher(contentResolver, dataConverter);
@@ -71,16 +78,17 @@ public class DataModule {
 
     @Singleton
     @Provides
-    DataConverter<List<Item>, Cursor> provideCursorToStoryIdsLoaderDataConverter() {
+    DataConverter<List<Item>, Cursor> provideCursorToStoryIdsDataConverter() {
         return new CursorToItemConverter();
     }
 
     @Singleton
     @Provides
     HackerNewsDatabaseOpenHelper provideHackerNewsDatabaseOpenHelper(Context context) {
-        return new HackerNewsDatabaseOpenHelper(context, "hackernewsdata.db", null, 1);
+        return new HackerNewsDatabaseOpenHelper(context, HACKERNEWSDATA_DB_FILE_NAME, null, 1);
     }
 
+    @Singleton
     @Provides
     SQLiteDatabase provideHackerNewsDatabase(HackerNewsDatabaseOpenHelper hackerNewsDatabaseOpenHelper) {
         return hackerNewsDatabaseOpenHelper.getWritableDatabase();
