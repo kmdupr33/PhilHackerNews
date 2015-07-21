@@ -11,6 +11,7 @@ import com.philosophicalhacker.philhackernews.model.Item;
 import java.util.List;
 
 /**
+ *
  * Created by MattDupree on 7/21/15.
  */
 class CommentsAdapter extends ItemAdapter {
