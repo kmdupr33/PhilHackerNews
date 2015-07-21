@@ -33,9 +33,6 @@ public class StoriesFragment extends LoaderFragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.swipeToRefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
     @SuppressWarnings("WeakerAccess")
     @Inject
     StoryRepository mStoryRepository;
@@ -49,7 +46,7 @@ public class StoriesFragment extends LoaderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_refreshable_list, container, false);
+        View view = inflater.inflate(R.layout.view_recycler, container, false);
         ButterKnife.bind(this, view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));

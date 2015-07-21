@@ -55,7 +55,7 @@ public class CommentsFragment extends LoaderFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.view_refreshable_list, container, false);
+        View rootView = inflater.inflate(R.layout.view_recycler, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
@@ -73,6 +73,12 @@ public class CommentsFragment extends LoaderFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_story_comments, menu);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     //----------------------------------------------------------------------------------

@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 public class StoryDetailFragment extends Fragment {
 
     private static final String ARGS_STORY = "ARGS_STORY";
+    private SwipeToRefreshUpdatingWebViewClient mClient;
 
     public static StoryDetailFragment newInstance(Item item) {
         StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
@@ -33,12 +34,8 @@ public class StoryDetailFragment extends Fragment {
         return storyDetailFragment;
     }
 
-
     @Bind(R.id.webView)
     WebView mWebView;
-
-    @Bind(R.id.swipeToRefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +46,8 @@ public class StoryDetailFragment extends Fragment {
         Item item = getArguments().getParcelable(ARGS_STORY);
         if (savedInstanceState == null) {
             getActivity().setTitle(item.getTitle());
-            mWebView.setWebViewClient(new SwipeToRefreshUpdatingWebViewClient(mSwipeRefreshLayout));
+            mClient = new SwipeToRefreshUpdatingWebViewClient(mSwipeRefreshLayout);
+            mWebView.setWebViewClient(mClient);
             mSwipeRefreshLayout.setOnRefreshListener(new WebViewReloadingOnRefreshListener(mWebView));
             String url = item.getUrl();
             if (url != null) {
@@ -62,15 +60,15 @@ public class StoryDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_story_detail, menu);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     //----------------------------------------------------------------------------------
@@ -86,6 +84,10 @@ public class StoryDetailFragment extends Fragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            /*
+            * This is to address a bug with SwipeToRefreshLayout that causes this fragment's to appear
+            * on screen, even though the fragment is replaced.
+            */
             mSwipeRefreshLayout.setRefreshing(true);
         }
 

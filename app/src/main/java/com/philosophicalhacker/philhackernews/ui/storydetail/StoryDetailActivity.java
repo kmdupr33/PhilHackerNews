@@ -4,14 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.RefreshableFragmentHostingActivity;
 import com.philosophicalhacker.philhackernews.ui.commentslist.CommentsFragment;
 
-public class StoryDetailActivity extends AppCompatActivity {
+public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
 
     private static final String EXTRA_STORY = "com.philosophicalhacker.philhackernews.EXTRA_STORY";
     private static final String STORY_FRAG_TAG = "story";
@@ -30,7 +30,6 @@ public class StoryDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_story_detail);
         mStoryItem = getIntent().getParcelableExtra(EXTRA_STORY);
         if (shouldShowStoryDetailFragment(savedInstanceState)) {
             showStoryDetailFragment(mStoryItem);
