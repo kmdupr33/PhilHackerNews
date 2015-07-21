@@ -39,11 +39,6 @@ public class StoryDetailActivity extends AppCompatActivity {
         }
     }
 
-    private boolean shouldShowStoryDetailFragment(Bundle savedInstanceState) {
-        return savedInstanceState == null ||
-                savedInstanceState.getBoolean(SAVE_STATE_DETAIL_FRAG_SHOW);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -67,6 +62,11 @@ public class StoryDetailActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------
+    private boolean shouldShowStoryDetailFragment(Bundle savedInstanceState) {
+        return savedInstanceState == null ||
+                savedInstanceState.getBoolean(SAVE_STATE_DETAIL_FRAG_SHOW);
+    }
+
     private void showStoryDetailFragment(Item item) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, getStoryDetailFragment(item), STORY_FRAG_TAG)
