@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.ui;
+package com.philosophicalhacker.philhackernews.ui.commentslist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +15,8 @@ import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.CommentRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.LoaderFragment;
+import com.philosophicalhacker.philhackernews.ui.RefreshableListSubscriber;
 
 import java.util.List;
 

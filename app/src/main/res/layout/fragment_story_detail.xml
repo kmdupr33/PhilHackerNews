@@ -1,7 +1,7 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.philosophicalhacker.philhackernews.ui.StoryDetailActivityFragment"
+    tools:context="com.philosophicalhacker.philhackernews.ui.storydetail.StoryDetailFragment"
     android:id="@+id/swipeToRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">

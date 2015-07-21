@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.ui;
+package com.philosophicalhacker.philhackernews.ui.storydetail;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,16 +21,16 @@ import butterknife.ButterKnife;
 /**
  * Shows a webview that points to the link within the HackerNews story.
  */
-public class StoryDetailActivityFragment extends Fragment {
+public class StoryDetailFragment extends Fragment {
 
     private static final String ARGS_STORY = "ARGS_STORY";
 
-    public static StoryDetailActivityFragment newInstance(Item item) {
-        StoryDetailActivityFragment storyDetailActivityFragment = new StoryDetailActivityFragment();
+    public static StoryDetailFragment newInstance(Item item) {
+        StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARGS_STORY, item);
-        storyDetailActivityFragment.setArguments(args);
-        return storyDetailActivityFragment;
+        storyDetailFragment.setArguments(args);
+        return storyDetailFragment;
     }
 
 

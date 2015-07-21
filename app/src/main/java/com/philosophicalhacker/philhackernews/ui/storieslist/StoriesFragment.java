@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.ui;
+package com.philosophicalhacker.philhackernews.ui.storieslist;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +12,8 @@ import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.LoaderFragment;
+import com.philosophicalhacker.philhackernews.ui.RefreshableListSubscriber;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ import rx.Subscription;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends LoaderFragment {
+public class StoriesFragment extends LoaderFragment {
 
     @SuppressWarnings("WeakerAccess")
     @Bind(R.id.recyclerView)

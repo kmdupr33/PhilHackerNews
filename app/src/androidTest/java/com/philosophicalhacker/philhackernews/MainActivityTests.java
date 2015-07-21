@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
-import com.philosophicalhacker.philhackernews.ui.MainActivity;
+import com.philosophicalhacker.philhackernews.ui.storieslist.StoriesActivity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class MainActivityTests {
     public static final String DUMMY_URL = "http://www.philosophicalhacker.com";
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<StoriesActivity> mActivityTestRule = new ActivityTestRule<>(StoriesActivity.class);
 
     @Inject
     DataSynchronizer mDataSynchronizer;

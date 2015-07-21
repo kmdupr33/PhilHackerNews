@@ -15,7 +15,7 @@ import dagger.ObjectGraph;
  *
  * Created by MattDupree on 7/20/15.
  */
-public class LoaderFragment extends Fragment {
+public abstract class LoaderFragment extends Fragment {
 
     @CallSuper
     @Override

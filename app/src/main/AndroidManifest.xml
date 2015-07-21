@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.storieslist.StoriesActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,12 +54,12 @@
         </provider>
 
         <activity
-            android:name=".ui.StoryDetailActivity"
+            android:name=".ui.storydetail.StoryDetailActivity"
             android:label="@string/title_activity_story_detail"
-            android:parentActivityName=".ui.MainActivity" >
+            android:parentActivityName=".ui.storieslist.StoriesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.philosophicalhacker.philhackernews.ui.MainActivity" />
+                android:value=".ui.storieslist.StoriesActivity" />
         </activity>
     </application>
 

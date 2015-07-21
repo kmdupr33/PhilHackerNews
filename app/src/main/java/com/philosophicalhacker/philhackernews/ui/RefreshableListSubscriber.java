@@ -14,12 +14,12 @@ import rx.Subscriber;
 /**
  * Created by MattDupree on 7/21/15.
  */
-abstract class RefreshableListSubscriber extends Subscriber<List<Item>> {
+public abstract class RefreshableListSubscriber extends Subscriber<List<Item>> {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
-    RefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout,
+    public RefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout,
                               RecyclerView recyclerView) {
         mSwipeRefreshLayout = swipeRefreshLayout;
         mRecyclerView = recyclerView;

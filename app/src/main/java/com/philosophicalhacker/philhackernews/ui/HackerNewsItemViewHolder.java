@@ -16,13 +16,13 @@ import butterknife.ButterKnife;
 public class HackerNewsItemViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.upvotesTextView)
-    TextView mCircleNumberTextView;
+    public TextView mCircleNumberTextView;
 
     @Bind(R.id.authorTextView)
-    TextView mAuthorTextView;
+    public TextView mAuthorTextView;
 
     @Bind(R.id.itemTextView)
-    TextView mItemTextView;
+    public TextView mItemTextView;
 
     public HackerNewsItemViewHolder(View itemView) {
         super(itemView);

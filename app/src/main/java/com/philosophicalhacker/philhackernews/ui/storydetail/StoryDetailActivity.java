@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.ui;
+package com.philosophicalhacker.philhackernews.ui.storydetail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,13 +9,14 @@ import android.view.MenuItem;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.commentslist.CommentsFragment;
 
 public class StoryDetailActivity extends AppCompatActivity {
 
     private static final String EXTRA_STORY = "com.philosophicalhacker.philhackernews.EXTRA_STORY";
     private static final String STORY_FRAG_TAG = "story";
     private static final String COMMENT_FRAG_TAG = "comments";
-    private StoryDetailActivityFragment mStoryDetailActivityFragment;
+    private StoryDetailFragment mStoryDetailFragment;
     private Fragment mCommentsFragment;
     private Item mItem;
 
@@ -30,9 +31,9 @@ public class StoryDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
         mItem = getIntent().getParcelableExtra(EXTRA_STORY);
-        mStoryDetailActivityFragment = StoryDetailActivityFragment.newInstance(mItem);
+        mStoryDetailFragment = StoryDetailFragment.newInstance(mItem);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, mStoryDetailActivityFragment, STORY_FRAG_TAG)
+                .replace(R.id.container, mStoryDetailFragment, STORY_FRAG_TAG)
                 .commit();
     }
 
@@ -46,7 +47,7 @@ public class StoryDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_view_story:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, mStoryDetailActivityFragment, STORY_FRAG_TAG)
+                        .replace(R.id.container, mStoryDetailFragment, STORY_FRAG_TAG)
                         .commit();
                 break;
         }

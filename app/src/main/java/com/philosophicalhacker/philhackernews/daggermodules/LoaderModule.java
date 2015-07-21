@@ -14,8 +14,8 @@ import com.philosophicalhacker.philhackernews.data.MultiCastingStoryRepository;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.model.Item;
-import com.philosophicalhacker.philhackernews.ui.CommentsFragment;
-import com.philosophicalhacker.philhackernews.ui.MainActivityFragment;
+import com.philosophicalhacker.philhackernews.ui.commentslist.CommentsFragment;
+import com.philosophicalhacker.philhackernews.ui.storieslist.StoriesFragment;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import rx.observables.ConnectableObservable;
  *
  * Created by MattDupree on 7/16/15.
  */
-@Module(injects = {MainActivityFragment.class,
+@Module(injects = {StoriesFragment.class,
         CommentsFragment.class},
         addsTo = PhilHackerNewsAppModule.class,
         complete = false)

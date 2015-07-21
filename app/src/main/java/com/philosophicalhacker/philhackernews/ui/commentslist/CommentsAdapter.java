@@ -1,4 +1,4 @@
-package com.philosophicalhacker.philhackernews.ui;
+package com.philosophicalhacker.philhackernews.ui.commentslist;
 
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.HackerNewsItemViewHolder;
+import com.philosophicalhacker.philhackernews.ui.ItemAdapter;
 
 import java.util.List;
 
