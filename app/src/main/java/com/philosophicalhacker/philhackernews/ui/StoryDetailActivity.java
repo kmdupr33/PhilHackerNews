@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -42,13 +41,11 @@ public class StoryDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_view_comments:
                 getSupportFragmentManager().beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .replace(R.id.container, getCommentsFragment(mItem), COMMENT_FRAG_TAG)
                         .commit();
                 break;
             case R.id.action_view_story:
                 getSupportFragmentManager().beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .replace(R.id.container, mStoryDetailActivityFragment, STORY_FRAG_TAG)
                         .commit();
                 break;

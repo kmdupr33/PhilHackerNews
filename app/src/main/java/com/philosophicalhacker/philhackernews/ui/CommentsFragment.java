@@ -2,6 +2,7 @@ package com.philosophicalhacker.philhackernews.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 
 /**
  * Created by MattDupree on 7/20/15.
@@ -32,6 +32,9 @@ public class CommentsFragment extends LoaderFragment {
 
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
+
+    @Bind(R.id.swipeToRefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject
     CommentRepository mCommentRepository;
@@ -50,14 +53,15 @@ public class CommentsFragment extends LoaderFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_comments, container, false);
+        View rootView = inflater.inflate(R.layout.view_refreshable_list, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
             Item item = getArguments().getParcelable(ARGS_ITEM);
             mDataSynchronizer.requestCommentsSync(item, 20);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mCommentRepository.getCommentsForStoryObservable(item).subscribe(mCommentsSubscriber);
+            RefreshableListSubscriber subscriber = new CommentsRefreshableListSubscriber(mSwipeRefreshLayout, mRecyclerView);
+            mCommentRepository.getCommentsForStoryObservable(item).subscribe(subscriber);
         }
         return rootView;
     }
@@ -69,23 +73,17 @@ public class CommentsFragment extends LoaderFragment {
     }
 
     //----------------------------------------------------------------------------------
-    // Helpers
+    // Nested Inner Class
     //----------------------------------------------------------------------------------
-    Subscriber<List<Item>> mCommentsSubscriber = new Subscriber<List<Item>>() {
-        @Override
-        public void onCompleted() {
+    private static class CommentsRefreshableListSubscriber extends RefreshableListSubscriber {
 
+        CommentsRefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout, RecyclerView recyclerView) {
+            super(swipeRefreshLayout, recyclerView);
         }
 
         @Override
-        public void onError(Throwable e) {
-
+        protected RecyclerView.Adapter getItemAdapter(List<Item> items) {
+            return new CommentsAdapter(items);
         }
-
-        @Override
-        public void onNext(List<Item> items) {
-            mRecyclerView.setAdapter(new CommentsAdapter(items));
-        }
-    };
-
+    }
 }

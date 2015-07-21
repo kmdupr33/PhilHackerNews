@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.StoryRepository;
@@ -20,7 +19,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.Subscription;
 
 
@@ -49,11 +47,12 @@ public class MainActivityFragment extends LoaderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.view_refreshable_list, container, false);
         ButterKnife.bind(this, view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));
-        mSubscription = mStoryRepository.addStoriesSubscriber(mStoriesSubscriber);
+        RefreshableListSubscriber refreshableListSubscriber = new StoriesRefreshableListSubscriber(mSwipeRefreshLayout, mRecyclerView);
+        mSubscription = mStoryRepository.addStoriesSubscriber(refreshableListSubscriber);
         mStoryRepository.loadTopStories();
         if (savedInstanceState == null) {
             mDataSynchronizer.requestTopStoriesSync();
@@ -74,35 +73,9 @@ public class MainActivityFragment extends LoaderFragment {
     }
 
     //----------------------------------------------------------------------------------
-    // Helpers
-    //----------------------------------------------------------------------------------
-    Subscriber<List<Item>> mStoriesSubscriber = new Subscriber<List<Item>>() {
-        @Override
-        public void onCompleted() {
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            Toast.makeText(getActivity(), R.string.story_load_error, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onNext(final List<Item> stories) {
-            if (stories.size() == 0) {
-                mSwipeRefreshLayout.setRefreshing(true);
-            } else {
-                mRecyclerView.setAdapter(new StoriesAdapter(stories));
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        }
-    };
-
-    //----------------------------------------------------------------------------------
     // Nested Inner Class
     //----------------------------------------------------------------------------------
-    private static class SyncOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+    static class SyncOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
 
         private DataSynchronizer mDataSynchronizer;
 
@@ -113,6 +86,20 @@ public class MainActivityFragment extends LoaderFragment {
         @Override
         public void onRefresh() {
             mDataSynchronizer.requestTopStoriesSync();
+        }
+    }
+
+    //----------------------------------------------------------------------------------
+    // Nested Inner Class
+    //----------------------------------------------------------------------------------
+    private static class StoriesRefreshableListSubscriber extends RefreshableListSubscriber {
+        public StoriesRefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout, RecyclerView recyclerView) {
+            super(swipeRefreshLayout, recyclerView);
+        }
+
+        @Override
+        protected RecyclerView.Adapter getItemAdapter(List<Item> items) {
+            return new StoriesAdapter(items);
         }
     }
 }
