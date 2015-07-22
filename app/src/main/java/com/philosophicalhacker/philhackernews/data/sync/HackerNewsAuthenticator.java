@@ -10,6 +10,8 @@ import android.os.Bundle;
 /**
  * Stub Authenticator so we can use {@link HackerNewsSyncAdapter}
  *
+ * See https://developer.android.com/training/sync-adapters/creating-authenticator.html
+ *
  * Created by MattDupree on 7/18/15.
  */
 public class HackerNewsAuthenticator extends AbstractAccountAuthenticator {
