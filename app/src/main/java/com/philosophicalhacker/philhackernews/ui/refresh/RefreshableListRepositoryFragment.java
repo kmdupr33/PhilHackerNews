@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  *
@@ -33,10 +32,10 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
-    protected CompositeSubscription mCompositeSubscription = new CompositeSubscription();
     private ConnectableObservable<List<Item>> mConnectableRepositoryObservable;
     private RefreshStatusListener mRefreshStatusListener;
     private OnRefreshableViewCreatedListener mOnRefreshableViewCreatedListener;
+    private Subscription mSubscription;
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,7 +61,7 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
         ButterKnife.bind(this, view);
         mOnRefreshableViewCreatedListener.onRefreshableViewCreated(mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Subscription subscription = mConnectableRepositoryObservable.subscribe(new Action1<List<Item>>() {
+        mSubscription = mConnectableRepositoryObservable.subscribe(new Action1<List<Item>>() {
             @Override
             public void call(List<Item> items) {
                 int refreshStatus = getRefreshStatus(items);
@@ -70,7 +69,6 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
                 mRecyclerView.setAdapter(getAdapter(items));
             }
         });
-        mCompositeSubscription.add(subscription);
         return view;
     }
 
@@ -88,7 +86,7 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
     @Override
     public void onStop() {
         super.onStop();
-        mCompositeSubscription.unsubscribe();
+        mSubscription.unsubscribe();
         mRefreshStatusListener.onRefreshingStatusChanged(RefreshStatusListener.NOT_REFRESHING);
     }
 

@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 
@@ -50,13 +49,12 @@ public class StoriesFragment extends RefreshableListRepositoryFragment implement
 
     @Override
     public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
-        Subscription subscription = swipeToRefreshObservable.subscribe(new Action1<Void>() {
+        swipeToRefreshObservable.subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 mDataSynchronizer.requestTopStoriesSync();
             }
         });
-        mCompositeSubscription.add(subscription);
     }
 
     @Override
