@@ -14,6 +14,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by MattDupree on 7/18/15.
  */
 public class Item implements Parcelable {
+
     private int id;
     private String type;
     private int score;
@@ -29,9 +30,9 @@ public class Item implements Parcelable {
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({TYPE_STORY, TYPE_COMMENT})
     public @interface ItemType {}
-
     public static final String TYPE_STORY = "story";
     public static final String TYPE_COMMENT = "comment";
+
     public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds, int parent) {
         this.id = id;
         this.type = type;
@@ -44,6 +45,9 @@ public class Item implements Parcelable {
         this.parent = parent;
     }
 
+    //----------------------------------------------------------------------------------
+    // Parcelable Implementation
+    //----------------------------------------------------------------------------------
     protected Item(Parcel in) {
         id = in.readInt();
         type = in.readString();
@@ -86,6 +90,9 @@ public class Item implements Parcelable {
         }
     };
 
+    //----------------------------------------------------------------------------------
+    // Public Methods
+    //----------------------------------------------------------------------------------
     public int getParent() {
         return parent;
     }
