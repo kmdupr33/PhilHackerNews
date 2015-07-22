@@ -23,6 +23,7 @@ import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 
 /**
+ * Fragment that loads data from a repository and is hosted by a {@link RefreshableFragmentHostingActivity}
  *
  * Created by MattDupree on 7/21/15.
  */
