@@ -21,6 +21,9 @@ public class RefreshableFragmentHostingActivity extends AppCompatActivity implem
     @Bind(R.id.swipeToRefresh)
     CustomChildSwipeRefreshLayout mSwipeRefreshLayout;
 
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,13 +67,19 @@ public class RefreshableFragmentHostingActivity extends AppCompatActivity implem
     // Helpers
     //----------------------------------------------------------------------------------
     private Observable<Void> makeRefreshInitiatedObservable() {
-        return Observable.create(new RefreshListenerSettingOnSubscribe());
+        return Observable.create(new RefreshListenerSettingOnSubscribe(mSwipeRefreshLayout));
     }
 
     //----------------------------------------------------------------------------------
     // Nested Inner Class
     //----------------------------------------------------------------------------------
-    private class RefreshListenerSettingOnSubscribe implements Observable.OnSubscribe<Void> {
+    private static class RefreshListenerSettingOnSubscribe implements Observable.OnSubscribe<Void> {
+        private SwipeRefreshLayout mSwipeRefreshLayout;
+
+        private RefreshListenerSettingOnSubscribe(SwipeRefreshLayout swipeRefreshLayout) {
+            mSwipeRefreshLayout = swipeRefreshLayout;
+        }
+
         @Override
         public void call(final Subscriber<? super Void> subscriber) {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
