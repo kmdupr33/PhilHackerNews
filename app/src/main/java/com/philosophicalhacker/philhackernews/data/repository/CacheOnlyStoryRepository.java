@@ -7,7 +7,6 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * StoryRepository that allows multiple RxJava subscribers to subscribe to data loading events.
  *
  * Created by MattDupree on 7/16/15.
  */
