@@ -33,6 +33,7 @@ class CommentsAdapter extends ItemAdapter {
         Item item = mItems.get(position);
         //Comment score is unavailable, so we show the comment's position in the list instead.
         holder.mCircleNumberTextView.setText(String.valueOf(position + 1));
-        holder.mItemTextView.setText(Html.fromHtml(item.getText()));
+        String text = item.getText();
+        holder.mItemTextView.setText(Html.fromHtml(text));
     }
 }

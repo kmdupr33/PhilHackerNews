@@ -25,6 +25,7 @@ public interface HackerNewsData {
         String TEXT = "text";
         String TYPE = "type";
         String PARENT = "parent";
+        String DELETED = "deleted";
 
         class Selection {
             public static final String ITEM_ID = Items._ID + " = ?";

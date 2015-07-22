@@ -26,6 +26,7 @@ public class Item implements Parcelable {
     @SerializedName("kids")
     private int[] comments;
     private int parent;
+    private boolean deleted;
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({TYPE_STORY, TYPE_COMMENT})
@@ -33,7 +34,7 @@ public class Item implements Parcelable {
     public static final String TYPE_STORY = "story";
     public static final String TYPE_COMMENT = "comment";
 
-    public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds, int parent) {
+    public Item(int id, @ItemType String type, int score, String title, String author, String url, String text, int[] commentIds, int parent, boolean deleted) {
         this.id = id;
         this.type = type;
         this.score = score;
@@ -43,11 +44,9 @@ public class Item implements Parcelable {
         this.text = text;
         this.comments = commentIds;
         this.parent = parent;
+        this.deleted = deleted;
     }
 
-    //----------------------------------------------------------------------------------
-    // Parcelable Implementation
-    //----------------------------------------------------------------------------------
     protected Item(Parcel in) {
         id = in.readInt();
         type = in.readString();
@@ -58,6 +57,7 @@ public class Item implements Parcelable {
         text = in.readString();
         comments = in.createIntArray();
         parent = in.readInt();
+        deleted = in.readInt() == 1;
     }
 
     @Override
@@ -71,6 +71,7 @@ public class Item implements Parcelable {
         dest.writeString(text);
         dest.writeIntArray(comments);
         dest.writeInt(parent);
+        dest.writeInt(deleted ? 1 : 0);
     }
 
     @Override
@@ -93,6 +94,10 @@ public class Item implements Parcelable {
     //----------------------------------------------------------------------------------
     // Public Methods
     //----------------------------------------------------------------------------------
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public int getParent() {
         return parent;
     }

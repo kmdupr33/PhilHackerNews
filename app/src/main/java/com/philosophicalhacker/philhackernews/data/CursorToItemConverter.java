@@ -23,6 +23,7 @@ public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> 
     private static final int TEXT_POS = 6;
     private static final int COMMENTS_POS = 7;
     private static final int PARENT_POS = 8;
+    private static final int DELETED_POS = 9;
 
     @Override
     public List<Item> convertData(Cursor data) {
@@ -46,8 +47,9 @@ public class CursorToItemConverter implements DataConverter<List<Item>, Cursor> 
                     commentIds[i] = Integer.parseInt(commentIdStrings[i]);
                 }
             }
+            boolean deleted = data.getInt(DELETED_POS) == 1;
             //noinspection ResourceType - type received from database, so we assume valid value
-            Item item = new Item(id, type, score, title, author, url, text, commentIds, parent);
+            Item item = new Item(id, type, score, title, author, url, text, commentIds, parent, deleted);
             itemIds.add(item);
         }
         return itemIds;

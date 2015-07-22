@@ -112,10 +112,12 @@ public class DataSynchronizer {
                                              HackerNewsCache hackerNewsCache) {
         for (int i = 0; i < remoteItems.size(); i++) {
             Item item = remoteItems.get(i);
-            if (cachedItems.contains(item)) {
-                hackerNewsCache.updateItem(item);
-            } else {
-                hackerNewsCache.insertItem(item);
+            if (!item.isDeleted()) {
+                if (cachedItems.contains(item)) {
+                    hackerNewsCache.updateItem(item);
+                } else {
+                    hackerNewsCache.insertItem(item);
+                }
             }
         }
     }

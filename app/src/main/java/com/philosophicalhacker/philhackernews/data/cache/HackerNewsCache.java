@@ -47,6 +47,7 @@ public class HackerNewsCache {
         contentValues.put(HackerNewsData.Items.URL, item.getUrl());
         contentValues.put(HackerNewsData.Items.TEXT, item.getText());
         contentValues.put(HackerNewsData.Items.PARENT, item.getParent());
+        contentValues.put(HackerNewsData.Items.DELETED, item.isDeleted());
         StringBuilder stringBuilder = new StringBuilder();
         int[] comments = item.getComments();
         if (comments != null) {
