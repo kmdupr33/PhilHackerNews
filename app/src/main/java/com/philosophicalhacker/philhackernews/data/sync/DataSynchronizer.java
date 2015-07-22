@@ -47,14 +47,14 @@ public class DataSynchronizer {
     // Public Methods
     //----------------------------------------------------------------------------------
     public void requestTopStoriesSync() {
-        Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
+        Bundle settingsBundle = makeExpeditedManualSyncSettingsBundle();
         settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_LIMIT, 20);
         Log.d(TAG, "Requesting data sync for account: " + mAccount);
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
     }
 
     public void requestCommentsSync(Item item, int limit) {
-        Bundle settingsBundle = makeExpenditedManualSyncSettingsBundle();
+        Bundle settingsBundle = makeExpeditedManualSyncSettingsBundle();
         settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_STORY, item.getId());
         settingsBundle.putInt(HackerNewsSyncAdapter.EXTRA_KEY_LIMIT, limit);
         ContentResolver.requestSync(mAccount, HackerNewsData.CONTENT_AUTHORITY, settingsBundle);
@@ -101,7 +101,7 @@ public class DataSynchronizer {
     // Helpers
     //----------------------------------------------------------------------------------
     @NonNull
-    private Bundle makeExpenditedManualSyncSettingsBundle() {
+    private Bundle makeExpeditedManualSyncSettingsBundle() {
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
