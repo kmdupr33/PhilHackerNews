@@ -28,6 +28,9 @@ public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
         return intent;
     }
 
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
