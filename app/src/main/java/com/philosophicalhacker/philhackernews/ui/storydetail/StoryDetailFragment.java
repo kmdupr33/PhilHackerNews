@@ -51,20 +51,23 @@ public class StoryDetailFragment extends Fragment implements Refreshable {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_story_detail, container, false);
         ButterKnife.bind(this, view);
-        mOnRefreshableViewCreatedListener.onRefreshableViewCreated(mWebView);
         Item item = getArguments().getParcelable(ARGS_STORY);
-        if (savedInstanceState == null) {
-            //noinspection ConstantConditions
-            getActivity().setTitle(item.getTitle());
-            mWebView.setWebViewClient(new RefreshIndicatorUpdatingWebViewClient(mRefreshStatusListener));
-            String url = item.getUrl();
-            if (url != null) {
-                mWebView.loadUrl(url);
-            } else {
-                mWebView.loadData(item.getText(), "text/html", "UTF-8");
-            }
+        //noinspection ConstantConditions
+        getActivity().setTitle(item.getTitle());
+        mWebView.setWebViewClient(new RefreshIndicatorUpdatingWebViewClient(mRefreshStatusListener));
+        String url = item.getUrl();
+        if (url != null) {
+            mWebView.loadUrl(url);
+        } else {
+            mWebView.loadData(item.getText(), "text/html", "UTF-8");
         }
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mOnRefreshableViewCreatedListener.onRefreshableViewCreated(mWebView);
     }
 
     @Override

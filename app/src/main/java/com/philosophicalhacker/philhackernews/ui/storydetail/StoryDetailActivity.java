@@ -88,6 +88,7 @@ public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
     }
 
     private CommentsFragment getCommentsFragment(Item item) {
+        mCommentsFragment = (CommentsFragment) getSupportFragmentManager().findFragmentByTag(COMMENT_FRAG_TAG);
         if (mCommentsFragment == null) {
             mCommentsFragment = CommentsFragment.newInstance(item);
         }
@@ -95,6 +96,7 @@ public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
     }
 
     private StoryDetailFragment getStoryDetailFragment(Item item) {
+        mStoryDetailFragment = (StoryDetailFragment) getSupportFragmentManager().findFragmentByTag(STORY_FRAG_TAG);
         if (mStoryDetailFragment == null) {
             mStoryDetailFragment = StoryDetailFragment.newInstance(item);
         }
