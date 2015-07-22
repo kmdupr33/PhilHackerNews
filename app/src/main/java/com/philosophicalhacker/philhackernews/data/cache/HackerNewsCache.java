@@ -51,7 +51,7 @@ public class HackerNewsCache {
         int[] comments = item.getComments();
         if (comments != null) {
             for (int i=0, end=comments.length; i<end;i++) {
-                stringBuilder.append(comments[i] + ",");
+                stringBuilder.append(comments[i]).append(",");
             }
         }
         contentValues.put(HackerNewsData.Items.COMMENTS, stringBuilder.toString());
