@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 /**
+ * Initiates stub authenticator for use of {@link HackerNewsSyncAdapter}
+ *
  * Created by MattDupree on 7/18/15.
  */
 public class HackerNewsAuthenticatorService extends Service {
