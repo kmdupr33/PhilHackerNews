@@ -26,7 +26,7 @@ public class HackerNewsDatabaseOpenHelper extends SQLiteOpenHelper {
                 + HackerNewsData.Items.TEXT + " TEXT, "
                 + HackerNewsData.Items.COMMENTS + " TEXT, "
                 + HackerNewsData.Items.PARENT + " INTEGER, "
-                + HackerNewsData.Items.DELETED + ")");
+                + HackerNewsData.Items.DELETED + " INTEGER)");
     }
 
     @Override
