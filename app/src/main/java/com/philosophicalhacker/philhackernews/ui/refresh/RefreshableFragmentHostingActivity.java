@@ -13,6 +13,11 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
+ * Hosts a {@link RefreshableListRepositoryFragment}. We need this class to faciliate communication
+ * between any hosted Fragments and the SwipeToRefreshLayout within this activity. SwipeToRefreshLayout
+ * is buggy when contained in a Fragment and its immediate child is ordinarily the view that is being refreshed.
+ * In our case, however, the refreshable view is contained inside a Fragment, so this class helps set up the
+ * communication the Activity, which owns the SwipeToRefreshLayout and the Fragment, which owns the refreshable view.
  *
  * Created by MattDupree on 7/21/15.
  */
