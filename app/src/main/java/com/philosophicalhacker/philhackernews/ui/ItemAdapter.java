@@ -11,6 +11,7 @@ import com.philosophicalhacker.philhackernews.model.Item;
 import java.util.List;
 
 /**
+ *
  * Created by MattDupree on 7/21/15.
  */
 public abstract class ItemAdapter extends RecyclerView.Adapter<HackerNewsItemViewHolder> {
