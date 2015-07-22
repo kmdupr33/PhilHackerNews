@@ -72,19 +72,14 @@ public class PhilHackerNewsApplication extends Application {
         AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
         Account[] accountsByType = accountManager.getAccountsByType(ACCOUNT_TYPE);
         if (!dummyAccountAlreadyAdded(accountsByType)) {
-            /*
-             * Add the account and account type, no password or user data
-             */
-            if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
-                //Call failed. See docs for possible reasons
-            }
+            accountManager.addAccountExplicitly(newAccount, null, null);
         }
         return newAccount;
     }
 
     private static boolean dummyAccountAlreadyAdded(Account[] accountsByType) {
         for (int i = 0; i < accountsByType.length; i++) {
-            if (accountsByType[i].name == ACCOUNT_NAME) {
+            if (accountsByType[i].name.equals(ACCOUNT_NAME)) {
                 return true;
             }
         }
