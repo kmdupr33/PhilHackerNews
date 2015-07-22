@@ -33,6 +33,9 @@ public class StoriesFragment extends RefreshableListRepositoryFragment implement
     @Inject
     DataSynchronizer mDataSynchronizer;
 
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,6 +50,9 @@ public class StoriesFragment extends RefreshableListRepositoryFragment implement
         ButterKnife.unbind(this);
     }
 
+    //----------------------------------------------------------------------------------
+    // Refreshable Interface Methods
+    //----------------------------------------------------------------------------------
     @Override
     public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
         swipeToRefreshObservable.subscribe(new Action1<Void>() {
@@ -57,6 +63,9 @@ public class StoriesFragment extends RefreshableListRepositoryFragment implement
         });
     }
 
+    //----------------------------------------------------------------------------------
+    // Protected Methods
+    //----------------------------------------------------------------------------------
     @Override
     protected RecyclerView.Adapter getAdapter(List<Item> items) {
         return new StoriesAdapter(items);
