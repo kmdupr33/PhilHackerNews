@@ -1,6 +1,5 @@
 package com.philosophicalhacker.philhackernews.data.repository;
 
-import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.model.Item;
 
 import java.util.List;
@@ -12,6 +11,6 @@ import rx.Observable;
  *
  * Created by MattDupree on 7/20/15.
  */
-public interface CommentRepository extends ItemRepository {
+public interface CommentRepository {
     Observable<List<Item>> getCommentsForStoryObservable(Item item);
 }

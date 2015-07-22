@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 
 import com.philosophicalhacker.philhackernews.data.DataConverter;
-import com.philosophicalhacker.philhackernews.data.ItemRepository;
 import com.philosophicalhacker.philhackernews.data.LoaderInitializingOnSubscribe;
 import com.philosophicalhacker.philhackernews.data.cache.HackerNewsData;
 import com.philosophicalhacker.philhackernews.data.repository.CacheOnlyCommentRepository;
@@ -51,7 +50,8 @@ public class RepositoryModule {
     @Provides
     CursorLoader provideStoryLoader(Context context) {
         return new CursorLoader(context, HackerNewsData.Items.CONTENT_URI, null,
-                HackerNewsData.Items.TYPE + "= ?", new String[] {Item.TYPE_STORY}, ItemRepository.SCORE_DESC_SORT_ORDER);
+                HackerNewsData.Items.TYPE + "= ?", new String[] {Item.TYPE_STORY},
+                HackerNewsData.Items.SortOrder.SCORE_DESC_SORT_ORDER);
     }
 
     @Provides

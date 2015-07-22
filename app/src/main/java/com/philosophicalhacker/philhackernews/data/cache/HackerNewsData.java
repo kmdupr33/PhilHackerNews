@@ -37,5 +37,9 @@ public interface HackerNewsData {
                 return new String[]{Item.TYPE_COMMENT, String.valueOf(storyId)};
             }
         }
+
+        interface SortOrder {
+            String SCORE_DESC_SORT_ORDER = HackerNewsData.Items.SCORE + " DESC";
+        }
     }
 }
