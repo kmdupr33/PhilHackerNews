@@ -20,7 +20,9 @@ public class RemoteDataFetcher implements DataFetcher {
     public RemoteDataFetcher(HackerNewsRestAdapter hackerNewsRestAdapter) {
         mHackerNewsRestAdapter = hackerNewsRestAdapter;
     }
-
+    //----------------------------------------------------------------------------------
+    // Public Methods
+    //----------------------------------------------------------------------------------
     @Override
     public List<Item> getTopStories(int limit) {
         /*
