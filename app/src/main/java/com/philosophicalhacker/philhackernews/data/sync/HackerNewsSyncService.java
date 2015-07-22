@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import dagger.ObjectGraph;
 
 /**
+ *
  * Created by MattDupree on 7/18/15.
  */
 public class HackerNewsSyncService extends Service {
