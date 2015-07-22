@@ -10,7 +10,7 @@ import rx.Observable;
  */
 public interface Refreshable {
 
-    void onRefreshStatusListener(RefreshStatusListener refreshStatusListener);
+    void setRefreshStatusListener(RefreshStatusListener refreshStatusListener);
 
     void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable);
 

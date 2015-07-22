@@ -43,7 +43,7 @@ public class StoryDetailFragment extends Fragment implements Refreshable {
     WebView mWebView;
 
     @Override
-    public void onRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
+    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
         mRefreshStatusListener = refreshStatusListener;
     }
 

@@ -33,7 +33,7 @@ public class RefreshableFragmentHostingActivity extends AppCompatActivity implem
     //----------------------------------------------------------------------------------
     protected void configureRefreshableFragment(Refreshable refreshable) {
         refreshable.onShouldRefreshObservableCreated(makeRefreshInitiatedObservable());
-        refreshable.onRefreshStatusListener(this);
+        refreshable.setRefreshStatusListener(this);
         refreshable.setOnRefreshableViewCreatedListener(this);
     }
 

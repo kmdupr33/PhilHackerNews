@@ -44,7 +44,7 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
     }
 
     @Override
-    public void onRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
+    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
         mRefreshStatusListener = refreshStatusListener;
     }
 
