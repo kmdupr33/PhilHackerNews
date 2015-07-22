@@ -63,6 +63,7 @@ public class CommentsFragment extends RefreshableListRepositoryFragment implemen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
+        getActivity().setTitle(mStory.getTitle());
         if (savedInstanceState == null) {
             mDataSynchronizer.requestCommentsSync(mStory, 20);
         }
