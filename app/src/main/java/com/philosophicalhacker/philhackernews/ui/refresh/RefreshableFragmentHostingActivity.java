@@ -52,10 +52,26 @@ public class RefreshableFragmentHostingActivity extends AppCompatActivity implem
     public void onRefreshingStatusChanged(@RefreshStatus int status) {
         switch (status) {
             case RefreshStatusListener.REFRESHING:
-                mSwipeRefreshLayout.setRefreshing(true);
+                /*
+                Work around for SwipeRefreshLayout bug filed at https://code.google.com/p/android/issues/detail?id=77712
+                 */
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                    }
+                });
                 break;
             case RefreshStatusListener.NOT_REFRESHING:
-                mSwipeRefreshLayout.setRefreshing(false);
+                /*
+                Work around for SwipeRefreshLayout bug filed at https://code.google.com/p/android/issues/detail?id=77712
+                 */
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
                 break;
         }
     }
