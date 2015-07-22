@@ -49,6 +49,9 @@ public class CommentsFragment extends RefreshableListRepositoryFragment implemen
         return commentsFragment;
     }
 
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     public void onAttach(Activity activity) {
         mStory = getArguments().getParcelable(ARGS_ITEM);
@@ -67,16 +70,6 @@ public class CommentsFragment extends RefreshableListRepositoryFragment implemen
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter(List<Item> items) {
-        return new CommentsAdapter(items);
-    }
-
-    @Override
-    protected ConnectableObservable<List<Item>> makeConnectableRepositoryObservable() {
-        return mCommentRepository.getCommentsForStoryObservable(mStory).publish();
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_story_comments, menu);
@@ -88,6 +81,22 @@ public class CommentsFragment extends RefreshableListRepositoryFragment implemen
         ButterKnife.unbind(this);
     }
 
+    //----------------------------------------------------------------------------------
+    // Protected Methods
+    //----------------------------------------------------------------------------------
+    @Override
+    protected RecyclerView.Adapter getAdapter(List<Item> items) {
+        return new CommentsAdapter(items);
+    }
+
+    @Override
+    protected ConnectableObservable<List<Item>> makeConnectableRepositoryObservable() {
+        return mCommentRepository.getCommentsForStoryObservable(mStory).publish();
+    }
+
+    //----------------------------------------------------------------------------------
+    // Refreshable - Interface Methods
+    //----------------------------------------------------------------------------------
     @Override
     public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
         swipeToRefreshObservable.subscribe(new Action1<Void>() {
