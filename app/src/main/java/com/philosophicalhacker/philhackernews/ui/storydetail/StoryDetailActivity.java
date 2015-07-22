@@ -70,6 +70,7 @@ public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
     //----------------------------------------------------------------------------------
     private void showStoryDetailFragment(Item item) {
         StoryDetailFragment storyDetailFragment = getStoryDetailFragment(item);
+        configureRefreshableFragment(storyDetailFragment);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, storyDetailFragment, STORY_FRAG_TAG)
                 .commit();
@@ -77,6 +78,7 @@ public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
 
     private void showCommentsFragment(Item item) {
         CommentsFragment commentsFragment = getCommentsFragment(item);
+        configureRefreshableFragment(commentsFragment);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, commentsFragment, COMMENT_FRAG_TAG)
                 .commit();

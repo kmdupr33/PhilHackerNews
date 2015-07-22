@@ -90,11 +90,11 @@ public class CommentsFragment extends RefreshableListRepositoryFragment implemen
 
     @Override
     public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
-        swipeToRefreshObservable.subscribe(new Action1<Void>() {
+        mCompositeSubscription.add(swipeToRefreshObservable.subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 mDataSynchronizer.requestCommentsSync(mStory, 20);
             }
-        });
+        }));
     }
 }

@@ -1,7 +1,6 @@
 package com.philosophicalhacker.philhackernews.ui.refresh;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.View;
 import com.philosophicalhacker.philhackernews.R;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -25,12 +25,13 @@ public class RefreshableFragmentHostingActivity extends AppCompatActivity implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refreshable_fragment_host);
+        ButterKnife.bind(this);
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        Refreshable refreshable = (Refreshable) fragment;
+    //----------------------------------------------------------------------------------
+    // Protected Methods
+    //----------------------------------------------------------------------------------
+    protected void configureRefreshableFragment(Refreshable refreshable) {
         refreshable.onShouldRefreshObservableCreated(makeRefreshInitiatedObservable());
         refreshable.onRefreshStatusListener(this);
         refreshable.setOnRefreshableViewCreatedListener(this);
