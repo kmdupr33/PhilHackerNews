@@ -37,20 +37,14 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
     private OnRefreshableViewCreatedListener mOnRefreshableViewCreatedListener;
     private Subscription mSubscription;
 
+
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mConnectableRepositoryObservable = makeConnectableRepositoryObservable();
-    }
-
-    @Override
-    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
-        mRefreshStatusListener = refreshStatusListener;
-    }
-
-    @Override
-    public void setOnRefreshableViewCreatedListener(OnRefreshableViewCreatedListener onRefreshableViewCreatedListener) {
-        mOnRefreshableViewCreatedListener = onRefreshableViewCreatedListener;
     }
 
     @CallSuper
@@ -90,6 +84,22 @@ public abstract class RefreshableListRepositoryFragment extends RepositoryFragme
         mRefreshStatusListener.onRefreshingStatusChanged(RefreshStatusListener.NOT_REFRESHING);
     }
 
+    //----------------------------------------------------------------------------------
+    // Refreshable Interface Methods
+    //----------------------------------------------------------------------------------
+    @Override
+    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
+        mRefreshStatusListener = refreshStatusListener;
+    }
+
+    @Override
+    public void setOnRefreshableViewCreatedListener(OnRefreshableViewCreatedListener onRefreshableViewCreatedListener) {
+        mOnRefreshableViewCreatedListener = onRefreshableViewCreatedListener;
+    }
+
+    //----------------------------------------------------------------------------------
+    // Protected Methods
+    //----------------------------------------------------------------------------------
     protected abstract RecyclerView.Adapter getAdapter(List<Item> items);
 
     protected abstract ConnectableObservable<List<Item>> makeConnectableRepositoryObservable();
