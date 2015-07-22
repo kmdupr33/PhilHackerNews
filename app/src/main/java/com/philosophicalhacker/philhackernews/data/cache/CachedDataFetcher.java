@@ -25,6 +25,9 @@ public class CachedDataFetcher implements DataFetcher {
         mCursorToItemConverter = cursorToItemConverter;
     }
 
+    //----------------------------------------------------------------------------------
+    // Public Methods
+    //----------------------------------------------------------------------------------
     @Override
     public List<Item> getTopStories(int limit) {
         Cursor cursor = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null, null, null, HackerNewsData.Items.SCORE + " DESC");
@@ -59,6 +62,9 @@ public class CachedDataFetcher implements DataFetcher {
         return getCommentsForStory(story, Integer.MAX_VALUE);
     }
 
+    //----------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------
     private Item getItem(long itemId) {
         Cursor query = mContentResolver.query(HackerNewsData.Items.CONTENT_URI, null,
                 HackerNewsData.Items.Selection.ITEM_ID,
