@@ -8,6 +8,7 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 
 /**
+ *
  * Created by MattDupree on 7/16/15.
  */
 public interface HackerNewsRestAdapter {
