@@ -3,22 +3,23 @@ package com.philosophicalhacker.philhackernews.ui.storydetail;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
 import com.philosophicalhacker.philhackernews.ui.commentslist.CommentsFragment;
+import com.philosophicalhacker.philhackernews.ui.refresh.RefreshableFragmentHostingActivity;
 
-public class StoryDetailActivity extends AppCompatActivity {
+import butterknife.ButterKnife;
+
+public class StoryDetailActivity extends RefreshableFragmentHostingActivity {
 
     private static final String EXTRA_STORY = "com.philosophicalhacker.philhackernews.EXTRA_STORY";
     private static final String STORY_FRAG_TAG = "story";
     private static final String COMMENT_FRAG_TAG = "comments";
     private static final String SAVE_STATE_DETAIL_FRAG_SHOW = "SAVE_STATE_DETAIL_FRAG_SHOW";
     private StoryDetailFragment mStoryDetailFragment;
-    private Fragment mCommentsFragment;
+    private CommentsFragment mCommentsFragment;
     private Item mStoryItem;
 
     public static Intent getStartIntent(Context context, Item item) {
@@ -30,7 +31,7 @@ public class StoryDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_story_detail);
+        ButterKnife.bind(this);
         mStoryItem = getIntent().getParcelableExtra(EXTRA_STORY);
         if (shouldShowStoryDetailFragment(savedInstanceState)) {
             showStoryDetailFragment(mStoryItem);
@@ -68,28 +69,33 @@ public class StoryDetailActivity extends AppCompatActivity {
     }
 
     private void showStoryDetailFragment(Item item) {
+        StoryDetailFragment storyDetailFragment = getStoryDetailFragment(item);
+        configureRefreshableFragment(storyDetailFragment);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, getStoryDetailFragment(item), STORY_FRAG_TAG)
+                .replace(R.id.container, storyDetailFragment, STORY_FRAG_TAG)
                 .commit();
     }
 
     private void showCommentsFragment(Item item) {
+        CommentsFragment commentsFragment = getCommentsFragment(item);
+        configureRefreshableFragment(commentsFragment);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, getCommentsFragment(item), COMMENT_FRAG_TAG)
+                .replace(R.id.container, commentsFragment, COMMENT_FRAG_TAG)
                 .commit();
     }
 
-    private Fragment getCommentsFragment(Item item) {
+    private CommentsFragment getCommentsFragment(Item item) {
         if (mCommentsFragment == null) {
             mCommentsFragment = CommentsFragment.newInstance(item);
         }
         return mCommentsFragment;
     }
 
-    private Fragment getStoryDetailFragment(Item item) {
+    private StoryDetailFragment getStoryDetailFragment(Item item) {
         if (mStoryDetailFragment == null) {
             mStoryDetailFragment = StoryDetailFragment.newInstance(item);
         }
         return mStoryDetailFragment;
     }
+
 }

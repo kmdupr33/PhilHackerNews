@@ -1,12 +1,11 @@
 package com.philosophicalhacker.philhackernews.ui;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.philosophicalhacker.philhackernews.PhilHackerNewsApplication;
-import com.philosophicalhacker.philhackernews.daggermodules.LoaderModule;
+import com.philosophicalhacker.philhackernews.daggermodules.RepositoryModule;
 
 import dagger.ObjectGraph;
 
@@ -15,14 +14,14 @@ import dagger.ObjectGraph;
  *
  * Created by MattDupree on 7/20/15.
  */
-public abstract class LoaderFragment extends Fragment {
+public abstract class RepositoryFragment extends Fragment {
 
     @CallSuper
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         PhilHackerNewsApplication application = (PhilHackerNewsApplication) getActivity().getApplication();
-        ObjectGraph plus = application.getObjectGraph().plus(new LoaderModule(getLoaderManager()));
+        ObjectGraph plus = application.getObjectGraph().plus(new RepositoryModule(getLoaderManager()));
         plus.inject(this);
     }
 }

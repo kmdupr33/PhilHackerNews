@@ -1,9 +1,8 @@
 package com.philosophicalhacker.philhackernews.ui.commentslist;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,37 +11,35 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.data.CommentRepository;
+import com.philosophicalhacker.philhackernews.data.repository.CommentRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
-import com.philosophicalhacker.philhackernews.ui.LoaderFragment;
-import com.philosophicalhacker.philhackernews.ui.RefreshableListSubscriber;
+import com.philosophicalhacker.philhackernews.ui.refresh.Refreshable;
+import com.philosophicalhacker.philhackernews.ui.refresh.RefreshableListRepositoryFragment;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.observables.ConnectableObservable;
 
 /**
+ *
  * Created by MattDupree on 7/20/15.
  */
-public class CommentsFragment extends LoaderFragment {
+public class CommentsFragment extends RefreshableListRepositoryFragment implements Refreshable {
 
     private static final String ARGS_ITEM = "item";
-
-    @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipeToRefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject
     CommentRepository mCommentRepository;
 
     @Inject
     DataSynchronizer mDataSynchronizer;
+    private Item mStory;
 
     public static CommentsFragment newInstance(Item item) {
         CommentsFragment commentsFragment = new CommentsFragment();
@@ -52,21 +49,31 @@ public class CommentsFragment extends LoaderFragment {
         return commentsFragment;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        mStory = getArguments().getParcelable(ARGS_ITEM);
+        super.onAttach(activity);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.view_refreshable_list, container, false);
-        ButterKnife.bind(this, rootView);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
-            Item item = getArguments().getParcelable(ARGS_ITEM);
-            mDataSynchronizer.requestCommentsSync(item, 20);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            RefreshableListSubscriber subscriber = new CommentsRefreshableListSubscriber(mSwipeRefreshLayout, mRecyclerView);
-            mSwipeRefreshLayout.setOnRefreshListener(new CommentSyncRequestingRefreshListener(item, mDataSynchronizer));
-            mCommentRepository.getCommentsForStoryObservable(item).subscribe(subscriber);
+            mDataSynchronizer.requestCommentsSync(mStory, 20);
         }
-        return rootView;
+        return view;
+    }
+
+    @Override
+    protected RecyclerView.Adapter getAdapter(List<Item> items) {
+        return new CommentsAdapter(items);
+    }
+
+    @Override
+    protected ConnectableObservable<List<Item>> makeConnectableRepositoryObservable() {
+        return mCommentRepository.getCommentsForStoryObservable(mStory).publish();
     }
 
     @Override
@@ -75,33 +82,19 @@ public class CommentsFragment extends LoaderFragment {
         inflater.inflate(R.menu.menu_story_comments, menu);
     }
 
-    //----------------------------------------------------------------------------------
-    // Nested Inner Class
-    //----------------------------------------------------------------------------------
-    private static class CommentsRefreshableListSubscriber extends RefreshableListSubscriber {
-
-        CommentsRefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout, RecyclerView recyclerView) {
-            super(swipeRefreshLayout, recyclerView);
-        }
-
-        @Override
-        protected RecyclerView.Adapter getItemAdapter(List<Item> items) {
-            return new CommentsAdapter(items);
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
-    private static class CommentSyncRequestingRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
-        private DataSynchronizer mDataSynchronizer;
-        private Item mItem;
-
-        public CommentSyncRequestingRefreshListener(Item item, DataSynchronizer dataSynchronizer) {
-            mItem = item;
-            mDataSynchronizer = dataSynchronizer;
-        }
-
-        @Override
-        public void onRefresh() {
-            mDataSynchronizer.requestCommentsSync(mItem, 20);
-        }
+    @Override
+    public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
+        swipeToRefreshObservable.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                mDataSynchronizer.requestCommentsSync(mStory, 20);
+            }
+        });
     }
 }

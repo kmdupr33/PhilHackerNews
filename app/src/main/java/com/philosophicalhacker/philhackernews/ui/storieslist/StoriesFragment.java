@@ -1,40 +1,29 @@
 package com.philosophicalhacker.philhackernews.ui.storieslist;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.philosophicalhacker.philhackernews.R;
-import com.philosophicalhacker.philhackernews.data.StoryRepository;
+import com.philosophicalhacker.philhackernews.data.repository.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
-import com.philosophicalhacker.philhackernews.ui.LoaderFragment;
-import com.philosophicalhacker.philhackernews.ui.RefreshableListSubscriber;
+import com.philosophicalhacker.philhackernews.ui.refresh.Refreshable;
+import com.philosophicalhacker.philhackernews.ui.refresh.RefreshableListRepositoryFragment;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscription;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.observables.ConnectableObservable;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class StoriesFragment extends LoaderFragment {
-
-    @SuppressWarnings("WeakerAccess")
-    @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
-
-    @Bind(R.id.swipeToRefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+public class StoriesFragment extends RefreshableListRepositoryFragment implements Refreshable {
 
     @SuppressWarnings("WeakerAccess")
     @Inject
@@ -44,28 +33,12 @@ public class StoriesFragment extends LoaderFragment {
     @Inject
     DataSynchronizer mDataSynchronizer;
 
-    private Subscription mSubscription;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_refreshable_list, container, false);
-        ButterKnife.bind(this, view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSwipeRefreshLayout.setOnRefreshListener(new SyncOnRefreshListener(mDataSynchronizer));
-        RefreshableListSubscriber refreshableListSubscriber = new StoriesRefreshableListSubscriber(mSwipeRefreshLayout, mRecyclerView);
-        mSubscription = mStoryRepository.addStoriesSubscriber(refreshableListSubscriber);
-        mStoryRepository.loadTopStories();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState == null) {
             mDataSynchronizer.requestTopStoriesSync();
         }
-        return view;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mSubscription.unsubscribe();
     }
 
     @Override
@@ -74,34 +47,23 @@ public class StoriesFragment extends LoaderFragment {
         ButterKnife.unbind(this);
     }
 
-    //----------------------------------------------------------------------------------
-    // Nested Inner Class
-    //----------------------------------------------------------------------------------
-    static class SyncOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
-
-        private DataSynchronizer mDataSynchronizer;
-
-        public SyncOnRefreshListener(DataSynchronizer dataSynchronizer) {
-            mDataSynchronizer = dataSynchronizer;
-        }
-
-        @Override
-        public void onRefresh() {
-            mDataSynchronizer.requestTopStoriesSync();
-        }
+    @Override
+    public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
+        swipeToRefreshObservable.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                mDataSynchronizer.requestTopStoriesSync();
+            }
+        });
     }
 
-    //----------------------------------------------------------------------------------
-    // Nested Inner Class
-    //----------------------------------------------------------------------------------
-    private static class StoriesRefreshableListSubscriber extends RefreshableListSubscriber {
-        public StoriesRefreshableListSubscriber(SwipeRefreshLayout swipeRefreshLayout, RecyclerView recyclerView) {
-            super(swipeRefreshLayout, recyclerView);
-        }
+    @Override
+    protected RecyclerView.Adapter getAdapter(List<Item> items) {
+        return new StoriesAdapter(items);
+    }
 
-        @Override
-        protected RecyclerView.Adapter getItemAdapter(List<Item> items) {
-            return new StoriesAdapter(items);
-        }
+    @Override
+    protected ConnectableObservable<List<Item>> makeConnectableRepositoryObservable() {
+        return mStoryRepository.loadTopStories().publish();
     }
 }

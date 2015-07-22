@@ -1,16 +1,28 @@
 package com.philosophicalhacker.philhackernews.ui.storieslist;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.philosophicalhacker.philhackernews.R;
+import com.philosophicalhacker.philhackernews.ui.refresh.RefreshableFragmentHostingActivity;
 
 
-public class StoriesActivity extends AppCompatActivity {
+public class StoriesActivity extends RefreshableFragmentHostingActivity {
+
+    private static final String CURRENT_FRAG_TAG = "currentFrag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        StoriesFragment storiesFragment;
+        if (savedInstanceState == null) {
+            storiesFragment = new StoriesFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, storiesFragment, CURRENT_FRAG_TAG)
+                    .commit();
+        } else {
+            storiesFragment = (StoriesFragment) getSupportFragmentManager().findFragmentByTag(CURRENT_FRAG_TAG);
+        }
+        configureRefreshableFragment(storiesFragment);
     }
 }

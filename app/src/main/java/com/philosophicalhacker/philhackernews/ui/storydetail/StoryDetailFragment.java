@@ -3,7 +3,6 @@ package com.philosophicalhacker.philhackernews.ui.storydetail;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,16 +13,23 @@ import android.webkit.WebViewClient;
 
 import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.model.Item;
+import com.philosophicalhacker.philhackernews.ui.refresh.OnRefreshableViewCreatedListener;
+import com.philosophicalhacker.philhackernews.ui.refresh.RefreshStatusListener;
+import com.philosophicalhacker.philhackernews.ui.refresh.Refreshable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Shows a webview that points to a link or the html text within the HackerNews story.
  */
-public class StoryDetailFragment extends Fragment {
+public class StoryDetailFragment extends Fragment implements Refreshable {
 
     private static final String ARGS_STORY = "ARGS_STORY";
+    private RefreshStatusListener mRefreshStatusListener;
+    private OnRefreshableViewCreatedListener mOnRefreshableViewCreatedListener;
 
     public static StoryDetailFragment newInstance(Item item) {
         StoryDetailFragment storyDetailFragment = new StoryDetailFragment();
@@ -33,12 +39,28 @@ public class StoryDetailFragment extends Fragment {
         return storyDetailFragment;
     }
 
-
     @Bind(R.id.webView)
     WebView mWebView;
 
-    @Bind(R.id.swipeToRefresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    @Override
+    public void onRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
+        mRefreshStatusListener = refreshStatusListener;
+    }
+
+    @Override
+    public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
+        swipeToRefreshObservable.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                mWebView.reload();
+            }
+        });
+    }
+
+    @Override
+    public void setOnRefreshableViewCreatedListener(OnRefreshableViewCreatedListener onRefreshableViewCreatedListener) {
+        mOnRefreshableViewCreatedListener = onRefreshableViewCreatedListener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,11 +68,11 @@ public class StoryDetailFragment extends Fragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_story_detail, container, false);
         ButterKnife.bind(this, view);
+        mOnRefreshableViewCreatedListener.onRefreshableViewCreated(mWebView);
         Item item = getArguments().getParcelable(ARGS_STORY);
         if (savedInstanceState == null) {
             getActivity().setTitle(item.getTitle());
-            mWebView.setWebViewClient(new SwipeToRefreshUpdatingWebViewClient(mSwipeRefreshLayout));
-            mSwipeRefreshLayout.setOnRefreshListener(new WebViewReloadingOnRefreshListener(mWebView));
+            mWebView.setWebViewClient(new RefreshIndicatorUpdatingWebViewClient(mRefreshStatusListener));
             String url = item.getUrl();
             if (url != null) {
                 mWebView.loadUrl(url);
@@ -62,53 +84,38 @@ public class StoryDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_story_detail, menu);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     //----------------------------------------------------------------------------------
     // Nested Inner Class
     //----------------------------------------------------------------------------------
-    private static class SwipeToRefreshUpdatingWebViewClient extends WebViewClient {
-        private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static class RefreshIndicatorUpdatingWebViewClient extends WebViewClient {
 
-        public SwipeToRefreshUpdatingWebViewClient(SwipeRefreshLayout swipeRefreshLayout) {
-            mSwipeRefreshLayout = swipeRefreshLayout;
+        public RefreshIndicatorUpdatingWebViewClient(RefreshStatusListener refreshStatusListener) {
+            mRefreshStatusListener = refreshStatusListener;
         }
+
+        private RefreshStatusListener mRefreshStatusListener;
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            mSwipeRefreshLayout.setRefreshing(true);
+            mRefreshStatusListener.onRefreshingStatusChanged(RefreshStatusListener.REFRESHING);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }
-    }
-
-    private static class WebViewReloadingOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
-
-        private WebView mWebView;
-
-        public WebViewReloadingOnRefreshListener(WebView webView) {
-            mWebView = webView;
-        }
-
-        @Override
-        public void onRefresh() {
-            mWebView.reload();
+            mRefreshStatusListener.onRefreshingStatusChanged(RefreshStatusListener.NOT_REFRESHING);
         }
     }
 }
