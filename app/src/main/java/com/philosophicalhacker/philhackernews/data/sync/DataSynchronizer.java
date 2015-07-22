@@ -77,7 +77,7 @@ public class DataSynchronizer {
     //----------------------------------------------------------------------------------
     void onSyncComments(int limit, int storyId) {
         /*
-        Unfortuantely, because of the way SyncAdapters work, we couldn't pass a story into this method.
+        Unfortunately, because of the way SyncAdapters work, we couldn't pass a story into this method.
         So, we have to get the story from the cache. Right now, the cache fetcher only hits the database
         for cached data.
 
