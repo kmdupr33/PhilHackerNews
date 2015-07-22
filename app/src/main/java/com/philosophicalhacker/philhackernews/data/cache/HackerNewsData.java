@@ -6,6 +6,8 @@ import android.provider.BaseColumns;
 import com.philosophicalhacker.philhackernews.model.Item;
 
 /**
+ * Contract Class for {@link HackerNewsContentProvider}
+ *
  * Created by MattDupree on 7/18/15.
  */
 public interface HackerNewsData {
