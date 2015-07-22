@@ -42,26 +42,9 @@ public class StoryDetailFragment extends Fragment implements Refreshable {
     @Bind(R.id.webView)
     WebView mWebView;
 
-    @Override
-    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
-        mRefreshStatusListener = refreshStatusListener;
-    }
-
-    @Override
-    public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
-        swipeToRefreshObservable.subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-                mWebView.reload();
-            }
-        });
-    }
-
-    @Override
-    public void setOnRefreshableViewCreatedListener(OnRefreshableViewCreatedListener onRefreshableViewCreatedListener) {
-        mOnRefreshableViewCreatedListener = onRefreshableViewCreatedListener;
-    }
-
+    //----------------------------------------------------------------------------------
+    // Lifecycle Methods
+    //----------------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,6 +54,7 @@ public class StoryDetailFragment extends Fragment implements Refreshable {
         mOnRefreshableViewCreatedListener.onRefreshableViewCreated(mWebView);
         Item item = getArguments().getParcelable(ARGS_STORY);
         if (savedInstanceState == null) {
+            //noinspection ConstantConditions
             getActivity().setTitle(item.getTitle());
             mWebView.setWebViewClient(new RefreshIndicatorUpdatingWebViewClient(mRefreshStatusListener));
             String url = item.getUrl();
@@ -93,6 +77,29 @@ public class StoryDetailFragment extends Fragment implements Refreshable {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    //----------------------------------------------------------------------------------
+    // Refreshable - Interface Methods
+    //----------------------------------------------------------------------------------
+    @Override
+    public void setRefreshStatusListener(RefreshStatusListener refreshStatusListener) {
+        mRefreshStatusListener = refreshStatusListener;
+    }
+
+    @Override
+    public void onShouldRefreshObservableCreated(Observable<Void> swipeToRefreshObservable) {
+        swipeToRefreshObservable.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                mWebView.reload();
+            }
+        });
+    }
+
+    @Override
+    public void setOnRefreshableViewCreatedListener(OnRefreshableViewCreatedListener onRefreshableViewCreatedListener) {
+        mOnRefreshableViewCreatedListener = onRefreshableViewCreatedListener;
     }
 
     //----------------------------------------------------------------------------------
