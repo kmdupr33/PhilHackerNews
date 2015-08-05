@@ -2,8 +2,13 @@ package com.philosophicalhacker.philhackernews.ui.storieslist;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.philosophicalhacker.philhackernews.R;
 import com.philosophicalhacker.philhackernews.data.repository.StoryRepository;
 import com.philosophicalhacker.philhackernews.data.sync.DataSynchronizer;
 import com.philosophicalhacker.philhackernews.model.Item;
@@ -42,6 +47,15 @@ public class StoriesFragment extends RefreshableListRepositoryFragment implement
         if (savedInstanceState == null) {
             mDataSynchronizer.requestTopStoriesSync();
         }
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_story_list, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
     }
 
     @Override

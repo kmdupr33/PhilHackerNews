@@ -5,4 +5,5 @@
     <string name="story_load_error">Unable to load items. Weird.</string>
     <string name="title_activity_story_detail">StoryDetail</string>
     <string name="action_view_story">Story</string>
+    <string name="action_search">Search</string>
 </resources>
